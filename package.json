@@ -1,0 +1,24 @@
+{
+  "name": "sidney",
+  "version": "0.0.1",
+  "description": "Async first, powerful event venue",
+  "main": "sidney.js",
+  "scripts": {
+    "test": "washington sidney.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xaviervia/sidney"
+  },
+  "keywords": [
+    "event",
+    "async",
+    "asynchronous"
+  ],
+  "author": "Xavier Via <fernando.via@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xaviervia/sidney/issues"
+  },
+  "homepage": "https://github.com/xaviervia/sidney"
+}
