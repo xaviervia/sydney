@@ -1,14 +1,11 @@
 {
-  "name": "sidney",
-  "version": "0.0.1",
-  "description": "Async first, powerful event venue",
-  "main": "sidney.js",
+  "name": "sydney.js",
   "scripts": {
-    "test": "washington sidney.js"
+    "test": "washington sydney.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xaviervia/sidney"
+    "url": "https://github.com/xaviervia/sydney"
   },
   "keywords": [
     "event",
@@ -18,7 +15,7 @@
   "author": "Xavier Via <fernando.via@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/xaviervia/sidney/issues"
+    "url": "https://github.com/xaviervia/sydney/issues"
   },
-  "homepage": "https://github.com/xaviervia/sidney"
+  "homepage": "https://github.com/xaviervia/sydney"
 }
