@@ -17,5 +17,6 @@
   "bugs": {
     "url": "https://github.com/xaviervia/sydney/issues"
   },
-  "homepage": "https://github.com/xaviervia/sydney"
+  "homepage": "https://github.com/xaviervia/sydney",
+  "version": "0.0.1"
 }
