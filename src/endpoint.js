@@ -213,6 +213,74 @@ example("Negator: delegates and negates", function () {
 })
 
 
+// PropertySetMatcher
+// ==================
+//
+// Returns the `&&` result of calling the `match` method in each `properties`,
+// forwarding the argument.
+//
+// Usage:
+// ```javascript
+// var property = new PropertySetMatcher(
+//   new ExactProperty("public", true),
+//   new WildcardProperty("value"),
+//   new ExactProperty("timestamp", 123456789)
+// )
+//
+// property.match({
+//   "public": true,
+//   "anyProp": "value",
+//   "timestamp": 123456789
+// }) // => true
+// ```
+var PropertySetMatcher = function () {
+  this.properties = []
+  for (var i = 0, j = arguments.length; i < j; i ++)
+    this.properties.push(arguments[i])
+}
+
+PropertySetMatcher.prototype = new Matchable
+
+example("PropertySetMatcher is a Matchable", function () {
+  assert(new PropertySetMatcher instanceof Matchable)
+})
+
+PropertySetMatcher.prototype.match = function (object) {
+  for (var i = 0, j = this.properties.length; i < j; i ++)
+    if (!this.properties[i].match(object)) return false
+
+  return true
+}
+
+example("PropertySetMatcher: AND of three properties", function () {
+  var property = new PropertySetMatcher(
+    new ExactProperty("public", true),
+    new WildcardProperty("value"),
+    new ExactProperty("timestamp", 123456789)
+  )
+
+  assert(property.match({
+    "public": true,
+    "anyProp": "value",
+    "timestamp": 123456789
+  }))
+})
+
+example("PropertySetMatcher: AND of three properties (false)", function () {
+  var property = new PropertySetMatcher(
+    new ExactProperty("public", true),
+    new WildcardProperty("value"),
+    new ExactProperty("timestamp", 123456789)
+  )
+
+  assert( ! property.match({
+    "public": false,
+    "anyProp": "value",
+    "timestamp": 123456789
+  }))
+})
+
+
 //
 //
 // Property:
