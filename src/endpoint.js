@@ -6,6 +6,7 @@ var assert  = require("assert");
 //
 // All other OPN structures can be added later as extensions.
 
+var Matchable = function () {}
 
 // WildcardProperty
 // ================
@@ -24,7 +25,11 @@ var WildcardProperty = function (value) {
 }
 
 WildcardProperty.prototype.match = function (object) {
-  for (key in object) if (object[key] === this.value) return true
+  if (this.value instanceof Matchable) {
+    for (key in object) if (this.value.match(object[key])) return true }
+
+  else {
+    for (key in object) if (object[key] === this.value) return true }
 
   return false
 }
@@ -37,7 +42,7 @@ example("WildcardProperty + string value #match: correct value, true", function 
 
 example("WildcardProperty + string value #match: incorrect value, false", function () {
   assert(
-    !(new WildcardProperty("value"))
+    ! new WildcardProperty("value")
       .match({"something": "not-value"}) )
 })
 
@@ -45,6 +50,33 @@ example("WildcardProperty + number value #match: correct value, true", function 
   assert(
     new WildcardProperty(4)
       .match({"otherThing": 4}) )
+})
+
+example("WildcardProperty + Matchable value #match: delegate, send values to Matchable (propagate false)", function () {
+  var matchable = new Matchable()
+  var toMatch   = {"something": "value", "other": "other-value"}
+  matchable.match = function (match) {
+    (this.match.called = this.match.called || {})[match] = true
+    return false }
+
+  assert(
+    ! new WildcardProperty(matchable)
+      .match(toMatch) )
+
+  assert(matchable.match.called["value"])
+  assert(matchable.match.called["other-value"])
+})
+
+example("WildcardProperty + Matchable value #match: delegate, send values to Matchable (propagate true)", function () {
+  var matchable = new Matchable()
+  var toMatch   = {"something": "value", "other": "other-value"}
+  matchable.match = function (match) {
+    (this.match.called = this.match.called || {})[match] = true
+    return match === "value" }
+
+  assert(
+    new WildcardProperty(matchable)
+      .match(toMatch) )
 })
 
 //
