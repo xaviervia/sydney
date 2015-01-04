@@ -317,6 +317,124 @@ example("WildcardValue: returns false if undefined", function () {
     ! new WildcardValue().match())
 })
 
+// - **number**: any value that serialized to JSON would be casted into a
+//   `number` literal.
+// - **string**: any value that serialized to JSON would be casted into a
+//   `string` literal.
+// - **array**: any value that serialized to JSON would be casted into an
+//   `array` literal.
+// - **object**: any value that serialized to JSON would be casted into an
+//   `object` literal.
+// - **boolean**: any value that serialized to JSON would be casted into
+//   either `true` or `false`
+var TypedValue = function (type) {
+  this.type = type
+}
+
+TypedValue.prototype = new Matchable
+
+example("TypedValue is a Matchable", function () {
+  assert(new TypedValue instanceof Matchable)
+})
+
+TypedValue.prototype.match = function (object) {
+  switch (this.type) {
+    case 'array':
+      return JSON.stringify(object).substring(0, 1) === '['
+      break;
+    case 'boolean':
+      return object === true || object === false
+      break
+    case 'number':
+      return JSON.stringify(object) === '' + object
+      break;
+    case 'object':
+      return (JSON.stringify(object) || '').substring(0, 1) === '{'
+      break;
+    case 'string':
+      return JSON.stringify(object) === '"' + object + '"'
+    default:
+      return object instanceof this.type
+  }
+}
+
+example("TypedValue: returns true if value is of type", function () {
+  assert(new TypedValue(Matchable).match(new Matchable))
+})
+
+example("TypedValue: returns false if value is not of type", function () {
+  assert( ! new TypedValue(TypedValue).match(new Matchable))
+})
+
+example("TypedValue + 'number': returns true if value is an integer", function () {
+  assert(new TypedValue('number').match(3))
+})
+
+example("TypedValue + 'number': returns true if value is a float", function () {
+  assert(new TypedValue('number').match(-2.4))
+})
+
+example("TypedValue + 'number': returns false if value is a string", function () {
+  assert( ! new TypedValue('number').match('-1'))
+})
+
+example("TypedValue + 'string': returns true if value is a plain String", function () {
+  assert(new TypedValue('string').match('some string'))
+})
+
+example("TypedValue + 'string': returns true if value is a String object", function () {
+  assert(new TypedValue('string').match(new String('some string')))
+})
+
+example("TypedValue + 'string': returns false if value is a number", function () {
+  assert( ! new TypedValue('string').match(3))
+})
+
+example("TypedValue + 'array': returns true if value is an Array", function () {
+  assert(new TypedValue('array').match(new Array))
+})
+
+example("TypedValue + 'array': returns false if value is arguments object", function () {
+  assert( ! new TypedValue('array').match(arguments))
+})
+
+example("TypedValue + 'array': returns false if value is a regular object", function () {
+  assert( ! new TypedValue('array').match({}))
+})
+
+example("TypedValue + 'boolean': returns true if value is true", function () {
+  assert(new TypedValue('boolean').match(true))
+})
+
+example("TypedValue + 'boolean': returns true if value is false", function () {
+  assert(new TypedValue('boolean').match(false))
+})
+
+example("TypedValue + 'object': returns true if value is a regular object", function () {
+  assert(new TypedValue('object').match({}))
+})
+
+example("TypedValue + 'object': returns false if value is a string", function () {
+  assert( ! new TypedValue('object').match('string'))
+})
+
+example("TypedValue + 'object': returns false if value is a number", function () {
+  assert( ! new TypedValue('object').match(-4))
+})
+
+example("TypedValue + 'object': returns false if value is a boolean", function () {
+  assert( ! new TypedValue('object').match(true))
+})
+
+example("TypedValue + 'object': returns false if value is an array", function () {
+  assert( ! new TypedValue('object').match([]))
+})
+
+example("TypedValue + 'object': returns false if value is a function", function () {
+  assert( ! new TypedValue('object').match(new Function()))
+})
+
+
 //
 //
 // Property:
