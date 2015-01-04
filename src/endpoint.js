@@ -168,6 +168,51 @@ example("ExactProperty + Matchable #match: delegates to matchable", function () 
   assert.equal(matchable.match.calledWith, "value")
 })
 
+// Negator
+// =======
+//
+// Delegates the matching to the sent matchable and negates the result.
+//
+// Usage:
+// ```javascript
+// var matchable = new Matchable();
+// matchable.match = function () {
+//   return true;
+// }
+//
+// var negator = new Negator(matchable);
+// negator.match({"here": "ignored"}); // => false
+// ```
+var Negator = function (matchable) {
+  this.matchable = matchable
+}
+
+Negator.prototype = new Matchable
+
+Negator.prototype.match = function (object) {
+  return !this.matchable.match(object)
+}
+
+example("Negator is a Matchable", function () {
+  assert(new Negator instanceof Matchable)
+})
+
+example("Negator: delegates and negates", function () {
+  var matchable = new Matchable
+  var theObject = {}
+  matchable.match = function (object) {
+    this.match.calledWith = object
+    return false }
+
+  assert(
+    new Negator(matchable)
+      .match(theObject) )
+
+  assert.equal(
+    matchable.match.calledWith, theObject)
+})
+
+
 //
 //
 // Property:
