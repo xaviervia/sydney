@@ -6,7 +6,10 @@ var assert  = require("assert");
 //
 // All other OPN structures can be added later as extensions.
 
+// Matchable
+// =========
 var Matchable = function () {}
+
 
 // WildcardProperty
 // ================
@@ -168,6 +171,7 @@ example("ExactProperty + Matchable #match: delegates to matchable", function () 
   assert.equal(matchable.match.calledWith, "value")
 })
 
+
 // Negator
 // =======
 //
@@ -280,6 +284,38 @@ example("PropertySetMatcher: AND of three properties (false)", function () {
   }))
 })
 
+
+// WildcardValue
+// =============
+//
+// Returns always `true` except if the argument is `undefined`.
+//
+// Usage:
+// ```javascript
+// var wildcardValue = new WildcardValue();
+// wildcardValue.match("something"); // => true
+// ```
+var WildcardValue = function () {}
+
+WildcardValue.prototype = new Matchable
+
+WildcardValue.prototype.match = function (object) {
+  return object !== undefined
+}
+
+example("WildcardValue is a Matchable", function () {
+  assert(new WildcardValue instanceof Matchable)
+})
+
+example("WildcardValue: returns true if not undefined", function () {
+  assert(
+    new WildcardValue().match("anything") )
+})
+
+example("WildcardValue: returns false if undefined", function () {
+  assert(
+    ! new WildcardValue().match())
+})
 
 //
 //
