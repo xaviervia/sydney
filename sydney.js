@@ -1,6 +1,8 @@
 var example   = require("washington")
 var assert    = require("assert")
 
+var Endpoint = require("./src/endpoint")
+
 example("Async: by default")
 
 example("Endpoint: match with glob style wildcards")
