@@ -705,6 +705,14 @@ example("ArrayElement: encapsulates any Matchable", function () {
 // result.matched; // => true
 // result.unmatched; // => ['extra']
 // ```
+var ArrayWildcard = function () {}
+
+ArrayWildcard.prototype = new ArrayMatchable
+
+ArrayWildcard.prototype.match = function (array) {
+  return array.length > 0
+}
+
 example("ArrayWildcard is a ArrayMatchable", function () {
   assert( new ArrayWildcard instanceof ArrayMatchable )
 })
