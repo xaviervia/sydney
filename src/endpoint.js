@@ -360,17 +360,23 @@ TypedValue.prototype.match = function (object) {
     case 'array':
       return JSON.stringify(object).substring(0, 1) === '['
       break;
+
     case 'boolean':
       return object === true || object === false
       break
+
     case 'number':
       return JSON.stringify(object) === '' + object
-      break;
+      break
+
     case 'object':
       return (JSON.stringify(object) || '').substring(0, 1) === '{'
-      break;
+      break
+
     case 'string':
       return JSON.stringify(object) === '"' + object + '"'
+      break
+
     default:
       return object instanceof this.type
   }
@@ -458,7 +464,69 @@ example("TypedValue + 'object': false if value is a function", function () {
 // ArrayMatcher
 // ============
 //
-// Matchers
+// Handles `ArrayMatchable`s, combining their results to return a final
+// `Boolean` value representing whether the `Array` was or not a match.
+//
+// Usage:
+//
+// ```javascript
+// var arrayMatcher = new ArrayMatcher(
+//   new ArrayElement( new TypedValue( 'number' ) ),
+//   'user',
+//   new ArrayWildcard(),
+//   new ArrayEllipsis( 9 )
+// );
+//
+// arrayMatcher.match([6, 'user', 9]); // => false
+// arrayMatcher.match([-56.2, 'user', 'extra', 9]); // => true
+// ```
+var ArrayMatcher = function () {
+  this.matchables = []
+
+  for (var i = 0; i < arguments.length; i ++)
+    this.matchables.push(arguments[i])
+}
+
+ArrayMatcher.prototype = new Matchable
+
+ArrayMatcher.prototype.match = function (array) {
+  if (!(array instanceof Array))
+    return false
+
+  if (this.matchables.length === 0 && array.length > 0)
+    return false
+
+  else if (this.matchables.length === 0 && array.length === 0)
+    return true
+
+  var filteredArray = array
+  var result = {}
+  var i = 0
+
+  for (; i < this.matchables.length; i ++) {
+    if (this.matchables[i] instanceof ArrayMatchable) {
+      result = this.matchables[i].match(filteredArray)
+
+      if (result.matched === false)
+        return false
+
+      filteredArray = result.unmatched
+    }
+
+    else {
+      if (filteredArray.length === 0)
+        return false
+
+      if (filteredArray[0] !== this.matchables[i])
+        return false
+
+      result.matched = true
+      filteredArray  = filteredArray.slice(1)
+    }
+  }
+
+  return result.matched && filteredArray.length === 0
+}
 
 example("ArrayMatcher is a Matchable", function () {
   assert( new ArrayMatcher instanceof Matchable )
@@ -476,7 +544,7 @@ example("ArrayMatcher + undefined: false for non empty array", function () {
   assert( ! new ArrayMatcher().match([ 'something' ]) )
 })
 
-example("ArrayMatcher + [ArrayMatchable]: forward elements and return `matches`", function () {
+example("ArrayMatcher + [ArrayMatchable]: forward elements and return `matched`", function () {
   var arrayMatchable = new ArrayMatchable
   arrayMatchable.match = function () {
     this.match.called = arguments
@@ -489,7 +557,7 @@ example("ArrayMatcher + [ArrayMatchable]: forward elements and return `matches`"
   var result = new ArrayMatcher(arrayMatchable).match(['something'])
 
   assert.equal( arrayMatchable.match.called[0], 'something' )
-  assert.equal( result, 'matched' )
+  assert.equal( result, true )
 })
 
 example("ArrayMatcher + [AM]: remaining elements mean not a match", function () {
@@ -536,6 +604,30 @@ example("ArrayMatcher + [AM, AM]: next is not called if first is false", functio
   assert( ! secondMatchable.match.called )
 })
 
+example("ArrayMatcher[non-AM, AM]: true when existing, sends the rest to the next AM", function () {
+  var arrayMatchable = new ArrayMatchable
+  var arrayMatcher = new ArrayMatcher('exactly', arrayMatchable)
+  arrayMatchable.match = function (argument) {
+    this.match.argument = argument
+    return {
+      matched: true,
+      unmatched: []
+    }
+  }
+
+  arrayMatcher.match(['exactly', 'extra'])
+
+  assert.equal( arrayMatchable.match.argument[0], 'extra' )
+  assert.equal( arrayMatchable.match.argument.length, 1 )
+})
+
+example("ArrayMatcher[non-AM, non-AM]: true when match", function () {
+  assert( new ArrayMatcher(5, 6).match([5, 6]) )
+})
+
+example("ArrayMatcher[non-AM, non-AM]: false when not a match", function () {
+  assert( ! new ArrayMatcher(5, 6).match([5, 7]) )
+})
 
 // ArrayMatchable
 // ==============
@@ -665,7 +757,7 @@ example("ArrayEllipsis[TypedValue]: false when there is no element of that type"
   assert( ! new ArrayEllipsis(new TypedValue('string')).match([2]).matched )
 })
 
-example("ArrayEllipsis[non-matchable]: true when an element === the non matchable", funciton () {
+example("ArrayEllipsis[non-matchable]: true when an element === the non matchable", function () {
   assert( new ArrayEllipsis(5).match([6, 5, 7]) )
 })
 
