@@ -18,5 +18,8 @@
     "url": "https://github.com/xaviervia/sydney/issues"
   },
   "homepage": "https://github.com/xaviervia/sydney",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "washington": "^0.7.1"
+  }
 }
