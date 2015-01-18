@@ -218,7 +218,7 @@ example("Negator: delegates and negates", function () {
 })
 
 
-// PropertySetMatcher
+// ObjectMatcher
 // ==================
 //
 // Returns the `&&` result of calling the `match` method in each `properties`,
@@ -226,7 +226,7 @@ example("Negator: delegates and negates", function () {
 //
 // Usage:
 // ```javascript
-// var property = new PropertySetMatcher(
+// var property = new ObjectMatcher(
 //   new ExactProperty("public", true),
 //   new WildcardProperty("value"),
 //   new ExactProperty("timestamp", 123456789)
@@ -238,27 +238,27 @@ example("Negator: delegates and negates", function () {
 //   "timestamp": 123456789
 // }) // => true
 // ```
-var PropertySetMatcher = function () {
+var ObjectMatcher = function () {
   this.properties = []
   for (var i = 0, j = arguments.length; i < j; i ++)
     this.properties.push(arguments[i])
 }
 
-PropertySetMatcher.prototype = new Matchable
+ObjectMatcher.prototype = new Matchable
 
-example("PropertySetMatcher is a Matchable", function () {
-  assert(new PropertySetMatcher instanceof Matchable)
+example("ObjectMatcher is a Matchable", function () {
+  assert(new ObjectMatcher instanceof Matchable)
 })
 
-PropertySetMatcher.prototype.match = function (object) {
+ObjectMatcher.prototype.match = function (object) {
   for (var i = 0, j = this.properties.length; i < j; i ++)
     if (!this.properties[i].match(object)) return false
 
   return true
 }
 
-example("PropertySetMatcher: AND of three properties", function () {
-  var property = new PropertySetMatcher(
+example("ObjectMatcher: AND of three properties", function () {
+  var property = new ObjectMatcher(
     new ExactProperty("public", true),
     new WildcardProperty("value"),
     new ExactProperty("timestamp", 123456789)
@@ -271,8 +271,8 @@ example("PropertySetMatcher: AND of three properties", function () {
   }))
 })
 
-example("PropertySetMatcher: AND of three properties (false)", function () {
-  var property = new PropertySetMatcher(
+example("ObjectMatcher: AND of three properties (false)", function () {
+  var property = new ObjectMatcher(
     new ExactProperty("public", true),
     new WildcardProperty("value"),
     new ExactProperty("timestamp", 123456789)
