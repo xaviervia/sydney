@@ -1,13 +1,14 @@
 var example = require("washington");
 var assert  = require("assert");
 
-// Two structures: Wildcard, Ellipsis, with optional names. The other is just string
-// literal.
-//
-// All other OPN structures can be added later as extensions.
+// OPN structures
 
 // Matchable
 // =========
+//
+// A common parent for all matchables. The interface that they are supposed to
+// implement (although `Matchable` itself does not) is to expose a `match`
+// method that returns either `true` or `false`.
 var Matchable = function () {}
 
 
@@ -307,16 +308,24 @@ example("WildcardValue is a Matchable", function () {
   assert(new WildcardValue instanceof Matchable)
 })
 
-example("WildcardValue: returns true if not undefined", function () {
+example("WildcardValue: true if not undefined", function () {
   assert(
     new WildcardValue().match("anything") )
 })
 
-example("WildcardValue: returns false if undefined", function () {
+example("WildcardValue: false if undefined", function () {
   assert(
     ! new WildcardValue().match())
 })
 
+// TypedValue
+// ==========
+//
+// If initialized with a `Function`, returns `true` only if the argument if
+// `instanceof` the `Function`.
+//
+// If initialized with the following `String` arguments, it returns `true`:
+//
 // - **number**: any value that serialized to JSON would be casted into a
 //   `number` literal.
 // - **string**: any value that serialized to JSON would be casted into a
@@ -327,6 +336,15 @@ example("WildcardValue: returns false if undefined", function () {
 //   `object` literal.
 // - **boolean**: any value that serialized to JSON would be casted into
 //   either `true` or `false`
+//
+// Usage:
+//
+// ```javascript
+// var Type = function () {};
+// var typedValue = new TypedValue(Type);
+//
+// typedValue.match(new Type()) // => true
+// ```
 var TypedValue = function (type) {
   this.type = type
 }
@@ -358,85 +376,307 @@ TypedValue.prototype.match = function (object) {
   }
 }
 
-example("TypedValue: returns true if value is of type", function () {
+example("TypedValue: true if value is of type", function () {
   assert(new TypedValue(Matchable).match(new Matchable))
 })
 
-example("TypedValue: returns false if value is not of type", function () {
+example("TypedValue: false if value is not of type", function () {
   assert( ! new TypedValue(TypedValue).match(new Matchable))
 })
 
-example("TypedValue + 'number': returns true if value is an integer", function () {
+example("TypedValue + 'number': true if value is an integer", function () {
   assert(new TypedValue('number').match(3))
 })
 
-example("TypedValue + 'number': returns true if value is a float", function () {
+example("TypedValue + 'number': true if value is a float", function () {
   assert(new TypedValue('number').match(-2.4))
 })
 
-example("TypedValue + 'number': returns false if value is a string", function () {
+example("TypedValue + 'number': false if value is a string", function () {
   assert( ! new TypedValue('number').match('-1'))
 })
 
-example("TypedValue + 'string': returns true if value is a plain String", function () {
+example("TypedValue + 'string': true if value is a plain String", function () {
   assert(new TypedValue('string').match('some string'))
 })
 
-example("TypedValue + 'string': returns true if value is a String object", function () {
+example("TypedValue + 'string': true if value is a String object", function () {
   assert(new TypedValue('string').match(new String('some string')))
 })
 
-example("TypedValue + 'string': returns false if value is a number", function () {
+example("TypedValue + 'string': false if value is a number", function () {
   assert( ! new TypedValue('string').match(3))
 })
 
-example("TypedValue + 'array': returns true if value is an Array", function () {
+example("TypedValue + 'array': true if value is an Array", function () {
   assert(new TypedValue('array').match(new Array))
 })
 
-example("TypedValue + 'array': returns false if value is arguments object", function () {
+example("TypedValue + 'array': false if value is arguments object", function () {
   assert( ! new TypedValue('array').match(arguments))
 })
 
-example("TypedValue + 'array': returns false if value is a regular object", function () {
+example("TypedValue + 'array': false if value is a regular object", function () {
   assert( ! new TypedValue('array').match({}))
 })
 
-example("TypedValue + 'boolean': returns true if value is true", function () {
+example("TypedValue + 'boolean': true if value is true", function () {
   assert(new TypedValue('boolean').match(true))
 })
 
-example("TypedValue + 'boolean': returns true if value is false", function () {
+example("TypedValue + 'boolean': true if value is false", function () {
   assert(new TypedValue('boolean').match(false))
 })
 
-example("TypedValue + 'object': returns true if value is a regular object", function () {
+example("TypedValue + 'object': true if value is a regular object", function () {
   assert(new TypedValue('object').match({}))
 })
 
-example("TypedValue + 'object': returns false if value is a string", function () {
+example("TypedValue + 'object': false if value is a string", function () {
   assert( ! new TypedValue('object').match('string'))
 })
 
-example("TypedValue + 'object': returns false if value is a number", function () {
+example("TypedValue + 'object': false if value is a number", function () {
   assert( ! new TypedValue('object').match(-4))
 })
 
-example("TypedValue + 'object': returns false if value is a boolean", function () {
+example("TypedValue + 'object': false if value is a boolean", function () {
   assert( ! new TypedValue('object').match(true))
 })
 
-example("TypedValue + 'object': returns false if value is an array", function () {
+example("TypedValue + 'object': false if value is an array", function () {
   assert( ! new TypedValue('object').match([]))
 })
 
-example("TypedValue + 'object': returns false if value is a function", function () {
+example("TypedValue + 'object': false if value is a function", function () {
   assert( ! new TypedValue('object').match(new Function()))
 })
 
 
+
+
+// ArrayMatcher
+// ============
 //
+// Matchers
+
+example("ArrayMatcher is a Matchable", function () {
+  assert( new ArrayMatcher instanceof Matchable )
+})
+
+example("ArrayMatcher + undefined: false for non array", function () {
+  assert( ! new ArrayMatcher().match('non array') )
+})
+
+example("ArrayMatcher + undefined: true for empty array", function () {
+  assert( new ArrayMatcher().match([]) )
+})
+
+example("ArrayMatcher + undefined: false for non empty array", function () {
+  assert( ! new ArrayMatcher().match([ 'something' ]) )
+})
+
+example("ArrayMatcher + [ArrayMatchable]: forward elements and return `matches`", function () {
+  var arrayMatchable = new ArrayMatchable
+  arrayMatchable.match = function () {
+    this.match.called = arguments
+    return {
+      matched: 'matched',
+      unmatched: []
+    }
+  }
+
+  var result = new ArrayMatcher(arrayMatchable).match(['something'])
+
+  assert.equal( arrayMatchable.match.called[0], 'something' )
+  assert.equal( result, 'matched' )
+})
+
+example("ArrayMatcher + [AM]: remaining elements mean not a match", function () {
+  var arrayMatchable = new ArrayMatchable
+  arrayMatchable.match = function () {
+    return {
+      matched: true,
+      unmatched: [ 'element!' ]
+    }
+  }
+
+  assert( ! new ArrayMatcher(arrayMatchable).match(['something']) )
+})
+
+example("ArrayMatcher + [AM, AM]: remaining elements are send to the next", function () {
+  var firstMatchable = new ArrayMatchable
+  var secondMatchable = new ArrayMatchable
+  var remaining = ['some', 'remaining']
+  firstMatchable.match = function () {
+    return {
+      matched: true,
+      unmatched: remaining } }
+  secondMatchable.match = function () {
+    this.match.called = arguments
+    return {
+      matched: true,
+      unmatched: ['irrelevant'] } }
+
+  new ArrayMatcher(firstMatchable, secondMatchable).match(['irrelevant'])
+
+  assert.equal( secondMatchable.match.called[0], remaining )
+})
+
+example("ArrayMatcher + [AM, AM]: next is not called if first is false", function () {
+  var firstMatchable = new ArrayMatchable
+  var secondMatchable = new ArrayMatchable
+  firstMatchable.match = function () {
+    return {
+      matched: false,
+      unmatched: [] } }
+  secondMatchable.match = function () { this.called = true }
+
+  assert( ! new ArrayMatcher(firstMatchable, secondMatchable).match(['']) )
+  assert( ! secondMatchable.match.called )
+})
+
+
+// ArrayMatchable
+// ==============
 //
-// Property:
-//   name: Wildcard|Ellipsis|value
-//   value: Wildcard|Ellipsis|value
+// A common parent for all descriptors of `Array` components. `ArrayMatchable`s
+// have a slightly different interface than regular `Matchable`s because they
+// need to send back the chunk of the Array that wasn't consumed by the current
+// pattern so that the `ArrayMatcher` can forward it to the next
+// `ArrayMatchable`.
+var ArrayMatchable = function () {}
+
+// ArrayElement
+// ============
+//
+// Encapsulated any Matchable. Forwards the content of the first element
+// of the argument `Array` to the `Matchable`'s `match` and returns:
+//
+// - `"matched"`: the result of `match`
+// - `"unmatched"`: the rest of the `Array`
+//
+// Usage:
+//
+// ```javascript
+// var arrayElement = new ArrayElement(new TypedValue('string'));
+//
+// var result = arrayElement.match(['text', 'extra']);
+// result.matched; // => true
+// result.unmatched; // => ['extra']
+// ```
+example("ArrayElement is ArrayMatchable", function () {
+  assert( new ArrayElement instanceof ArrayMatchable )
+})
+
+example("ArrayElement: encapsulates any Matchable", function () {
+  var matchable = new Matchable
+  var arrayElement = new ArrayMatchable(matchable)
+  var result = undefined
+  matchable.match = function (argument) {
+    this.match.argument = argument
+    return 'matched'
+  }
+
+  result = arrayElement.match(['something', 'extra'])
+
+  assert.equal( result.matched, 'matched' )
+  assert.equal( matchable.match.argument, 'something' )
+  assert.equal( result.unmatched[0], 'extra' )
+})
+
+// ArrayWildcard
+// =============
+//
+// Returns `true` unless there is nothing in the `Array`. Removes the first
+// element from the `Array`.
+//
+// Usage:
+//
+// ```javascript
+// var arrayWildcard = new ArrayWildcard();
+//
+// var result = arrayWildcard.match(['anything', 'extra']);
+// result.matched; // => true
+// result.unmatched; // => ['extra']
+// ```
+example("ArrayWildcard is a ArrayMatchable", function () {
+  assert( new ArrayWildcard instanceof ArrayMatchable )
+})
+
+example("ArrayWildcard: false if empty", function () {
+  assert( ! new ArrayWildcard().match([]) )
+})
+
+example("ArrayWildcard: true if non empty", function () {
+  assert( new ArrayWildcard().match(['something']) )
+})
+
+// ArrayEllipsis
+// =============
+//
+// The `ArrayEllipsis` represents a variable length pattern, and it's behavior
+// depends on how it is configured.
+//
+// 1. Passing no arguments to the `ArrayEllipsis` will create a _catch all_
+//    pattern that will match anything, even no elements at all.
+// 2. Passing any `Matchable` to the `ArrayEllipsis` will cause it to
+//    sequentially probe each element for a match with the `Matchable`. That
+//    `Matchable` is called the _termination_ of the ellipsis pattern. If a
+//    match happens, the `ArrayEllipsis` will stop, return `true` in `matched`
+//    and the remainings of the `Array` in `unmatched`.
+//
+// Usage:
+//
+// ```javascript
+// var arrayEllipsis = new ArrayEllipsis();
+//
+// var result = arrayEllipsis.match(['element', 2, {}]);
+// result.matched; // => true
+// result.unmatched; // => []
+// ```
+//
+// With termination:
+//
+// ```javascript
+// var arrayEllipsis = new ArrayEllipsis(new TypedValue('string'));
+//
+// var result = arrayEllipsis.match([2, 4, 'text', 'extra']);
+// result.matched; // => true
+// result.unmatched; // => ['extra']
+// ```
+example("ArrayEllipsis is a ArrayMatchable", function () {
+  assert( new ArrayEllipsis instanceof ArrayMatchable )
+})
+
+example("ArrayEllipsis[]: true if empty", function () {
+  assert( new ArrayEllipsis().match([]).matched )
+})
+
+example("ArrayEllipsis[]: true with some elements", function () {
+  assert( new ArrayEllipsis().match([2 , 4]).matched )
+})
+
+example("ArrayEllipsis[TypedValue]: true when there is an element of that type", function () {
+  assert( new ArrayEllipsis(new TypedValue('string')).match(['a']).matched )
+})
+
+example("ArrayEllipsis[TypedValue]: false when there is no element of that type", function () {
+  assert( ! new ArrayEllipsis(new TypedValue('string')).match([2]).matched )
+})
+
+example("ArrayEllipsis[non-matchable]: true when an element === the non matchable", funciton () {
+  assert( new ArrayEllipsis(5).match([6, 5, 7]) )
+})
+
+example("ArrayEllipsis[non-matchable]: false when not found", function () {
+  assert( ! new ArrayEllipsis(7).match([1, 2, 3]).matched )
+})
+
+example("ArrayEllipsis[non-matchable]: returns the remaining elements, non-greedy", function () {
+  var result = new ArrayEllipsis(6).match([2, 6, 3, 6])
+
+  assert.equal( result.unmatched.length, 2 )
+  assert.equal( result.unmatched[0], 3 )
+  assert.equal( result.unmatched[1], 6 )
+})
