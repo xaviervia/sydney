@@ -827,3 +827,17 @@ example("ArrayEllipsis[non-matchable]: returns the remaining elements, non-greed
   assert.equal( result.unmatched[0], 3 )
   assert.equal( result.unmatched[1], 6 )
 })
+
+module.exports = {
+  Matchable: Matchable,
+  WildcardProperty: WildcardProperty,
+  ExactProperty: ExactProperty,
+  Negator: Negator,
+  ObjectMatcher: ObjectMatcher,
+  WildcardValue: WildcardValue,
+  TypedValue: TypedValue,
+  ArrayMatcher: ArrayMatcher,
+  ArrayElement: ArrayElement,
+  ArrayWildcard: ArrayWildcard,
+  ArrayEllipsis: ArrayEllipsis
+}

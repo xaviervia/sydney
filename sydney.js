@@ -1,7 +1,7 @@
 var example   = require("washington")
 var assert    = require("assert")
 
-var Endpoint = require("./src/endpoint")
+var Matchables = require("./src/matchables")
 
 example("Async: by default")
 
