@@ -657,13 +657,26 @@ var ArrayMatchable = function () {}
 // result.matched; // => true
 // result.unmatched; // => ['extra']
 // ```
+var ArrayElement = function (matchable) {
+  this.matchable = matchable
+}
+
+ArrayElement.prototype = new ArrayMatchable
+
+ArrayElement.prototype.match = function (array) {
+  return {
+    matched: this.matchable.match(array[0]),
+    unmatched: array.slice(1)
+  }
+}
+
 example("ArrayElement is ArrayMatchable", function () {
   assert( new ArrayElement instanceof ArrayMatchable )
 })
 
 example("ArrayElement: encapsulates any Matchable", function () {
   var matchable = new Matchable
-  var arrayElement = new ArrayMatchable(matchable)
+  var arrayElement = new ArrayElement(matchable)
   var result = undefined
   matchable.match = function (argument) {
     this.match.argument = argument
