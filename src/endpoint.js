@@ -758,6 +758,40 @@ example("ArrayWildcard: true if non empty", function () {
 // result.matched; // => true
 // result.unmatched; // => ['extra']
 // ```
+var ArrayEllipsis = function (termination) {
+  this.termination = termination
+}
+
+ArrayEllipsis.prototype = new ArrayMatchable
+
+ArrayEllipsis.prototype.match = function (array) {
+  if ( ! this.termination)
+    return {
+      matched: true,
+      unmached: [] }
+
+  for (var index = 0; index < array.length; index ++) {
+    if (this.termination instanceof Matchable) {
+      if (this.termination.match(array[index]))
+        return {
+          matched: true,
+          unmatched: array.slice(index + 1) }
+    }
+
+    else {
+      if (this.termination === array[index])
+        return {
+          matched: true,
+          unmatched: array.slice(index + 1)}
+    }
+  }
+
+  return {
+    matched: false,
+    unmatched: []
+  }
+}
+
 example("ArrayEllipsis is a ArrayMatchable", function () {
   assert( new ArrayEllipsis instanceof ArrayMatchable )
 })
