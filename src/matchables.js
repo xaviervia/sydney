@@ -1,7 +1,7 @@
-var example = require("washington");
-var assert  = require("assert");
+var example = require("washington")
+var assert  = require("assert")
 
-// OPN structures
+
 
 // Matchable
 // =========
@@ -9,7 +9,9 @@ var assert  = require("assert");
 // A common parent for all matchables. The interface that they are supposed to
 // implement (although `Matchable` itself does not) is to expose a `match`
 // method that returns either `true` or `false`.
+//
 var Matchable = function () {}
+
 
 
 // WildcardProperty
@@ -32,6 +34,7 @@ var Matchable = function () {}
 // wildcardProperty = new WildcardProperty(matchable);
 // wildcardProperty.match({"property": "value"}); // => true
 // ```
+//
 var WildcardProperty = function (value) {
   this.value = value
 }
@@ -98,6 +101,7 @@ example("WildcardProperty + Matchable value #match: delegate, send values to Mat
 })
 
 
+
 // ExactProperty
 // =============
 //
@@ -105,7 +109,7 @@ example("WildcardProperty + Matchable value #match: delegate, send values to Mat
 // `===` to the assigned value. `false` otherwise.
 //
 // If initialized with an inheritor of `Matchable` it will
-// forward the `match` to the matchable, if the propery exists.
+// forward the `match` to the matchable, if the property exists.
 //
 // Usage:
 //
@@ -126,6 +130,7 @@ example("WildcardProperty + Matchable value #match: delegate, send values to Mat
 // exactProperty = new ExactProperty("project", matchable);
 // exactProperty.match({"property": "value"}); // => false
 // ```
+//
 var ExactProperty = function (name, value) {
   this.name   = name
   this.value  = value
@@ -173,6 +178,7 @@ example("ExactProperty + Matchable #match: delegates to matchable", function () 
 })
 
 
+
 // Negator
 // =======
 //
@@ -188,6 +194,7 @@ example("ExactProperty + Matchable #match: delegates to matchable", function () 
 // var negator = new Negator(matchable);
 // negator.match({"here": "ignored"}); // => false
 // ```
+//
 var Negator = function (matchable) {
   this.matchable = matchable
 }
@@ -218,15 +225,16 @@ example("Negator: delegates and negates", function () {
 })
 
 
-// ObjectMatcher
-// ==================
+
+// ObjectPattern
+// =============
 //
 // Returns the `&&` result of calling the `match` method in each `properties`,
 // forwarding the argument.
 //
 // Usage:
 // ```javascript
-// var property = new ObjectMatcher(
+// var property = new ObjectPattern(
 //   new ExactProperty("public", true),
 //   new WildcardProperty("value"),
 //   new ExactProperty("timestamp", 123456789)
@@ -238,27 +246,28 @@ example("Negator: delegates and negates", function () {
 //   "timestamp": 123456789
 // }) // => true
 // ```
-var ObjectMatcher = function () {
+//
+var ObjectPattern = function () {
   this.properties = []
   for (var i = 0, j = arguments.length; i < j; i ++)
     this.properties.push(arguments[i])
 }
 
-ObjectMatcher.prototype = new Matchable
+ObjectPattern.prototype = new Matchable
 
-example("ObjectMatcher is a Matchable", function () {
-  assert(new ObjectMatcher instanceof Matchable)
+example("ObjectPattern is a Matchable", function () {
+  assert(new ObjectPattern instanceof Matchable)
 })
 
-ObjectMatcher.prototype.match = function (object) {
+ObjectPattern.prototype.match = function (object) {
   for (var i = 0, j = this.properties.length; i < j; i ++)
     if (!this.properties[i].match(object)) return false
 
   return true
 }
 
-example("ObjectMatcher: AND of three properties", function () {
-  var property = new ObjectMatcher(
+example("ObjectPattern: AND of three properties", function () {
+  var property = new ObjectPattern(
     new ExactProperty("public", true),
     new WildcardProperty("value"),
     new ExactProperty("timestamp", 123456789)
@@ -271,8 +280,8 @@ example("ObjectMatcher: AND of three properties", function () {
   }))
 })
 
-example("ObjectMatcher: AND of three properties (false)", function () {
-  var property = new ObjectMatcher(
+example("ObjectPattern: AND of three properties (false)", function () {
+  var property = new ObjectPattern(
     new ExactProperty("public", true),
     new WildcardProperty("value"),
     new ExactProperty("timestamp", 123456789)
@@ -286,6 +295,7 @@ example("ObjectMatcher: AND of three properties (false)", function () {
 })
 
 
+
 // WildcardValue
 // =============
 //
@@ -296,6 +306,7 @@ example("ObjectMatcher: AND of three properties (false)", function () {
 // var wildcardValue = new WildcardValue();
 // wildcardValue.match("something"); // => true
 // ```
+//
 var WildcardValue = function () {}
 
 WildcardValue.prototype = new Matchable
@@ -317,6 +328,8 @@ example("WildcardValue: false if undefined", function () {
   assert(
     ! new WildcardValue().match())
 })
+
+
 
 // TypedValue
 // ==========
@@ -345,6 +358,7 @@ example("WildcardValue: false if undefined", function () {
 //
 // typedValue.match(new Type()) // => true
 // ```
+//
 var TypedValue = function (type) {
   this.type = type
 }
@@ -460,8 +474,7 @@ example("TypedValue + 'object': false if value is a function", function () {
 
 
 
-
-// ArrayMatcher
+// ArrayPattern
 // ============
 //
 // Handles `ArrayMatchable`s, combining their results to return a final
@@ -470,7 +483,7 @@ example("TypedValue + 'object': false if value is a function", function () {
 // Usage:
 //
 // ```javascript
-// var arrayMatcher = new ArrayMatcher(
+// var arrayMatcher = new ArrayPattern(
 //   new ArrayElement( new TypedValue( 'number' ) ),
 //   'user',
 //   new ArrayWildcard(),
@@ -480,16 +493,17 @@ example("TypedValue + 'object': false if value is a function", function () {
 // arrayMatcher.match([6, 'user', 9]); // => false
 // arrayMatcher.match([-56.2, 'user', 'extra', 9]); // => true
 // ```
-var ArrayMatcher = function () {
+//
+var ArrayPattern = function () {
   this.matchables = []
 
   for (var i = 0; i < arguments.length; i ++)
     this.matchables.push(arguments[i])
 }
 
-ArrayMatcher.prototype = new Matchable
+ArrayPattern.prototype = new Matchable
 
-ArrayMatcher.prototype.match = function (array) {
+ArrayPattern.prototype.match = function (array) {
   if (!(array instanceof Array))
     return false
 
@@ -528,23 +542,23 @@ ArrayMatcher.prototype.match = function (array) {
   return result.matched && filteredArray.length === 0
 }
 
-example("ArrayMatcher is a Matchable", function () {
-  assert( new ArrayMatcher instanceof Matchable )
+example("ArrayPattern is a Matchable", function () {
+  assert( new ArrayPattern instanceof Matchable )
 })
 
-example("ArrayMatcher + undefined: false for non array", function () {
-  assert( ! new ArrayMatcher().match('non array') )
+example("ArrayPattern + undefined: false for non array", function () {
+  assert( ! new ArrayPattern().match('non array') )
 })
 
-example("ArrayMatcher + undefined: true for empty array", function () {
-  assert( new ArrayMatcher().match([]) )
+example("ArrayPattern + undefined: true for empty array", function () {
+  assert( new ArrayPattern().match([]) )
 })
 
-example("ArrayMatcher + undefined: false for non empty array", function () {
-  assert( ! new ArrayMatcher().match([ 'something' ]) )
+example("ArrayPattern + undefined: false for non empty array", function () {
+  assert( ! new ArrayPattern().match([ 'something' ]) )
 })
 
-example("ArrayMatcher + [ArrayMatchable]: forward elements and return `matched`", function () {
+example("ArrayPattern + [ArrayMatchable]: forward elements and return `matched`", function () {
   var arrayMatchable = new ArrayMatchable
   arrayMatchable.match = function () {
     this.match.called = arguments
@@ -554,13 +568,13 @@ example("ArrayMatcher + [ArrayMatchable]: forward elements and return `matched`"
     }
   }
 
-  var result = new ArrayMatcher(arrayMatchable).match(['something'])
+  var result = new ArrayPattern(arrayMatchable).match(['something'])
 
   assert.equal( arrayMatchable.match.called[0], 'something' )
   assert.equal( result, true )
 })
 
-example("ArrayMatcher + [AM]: remaining elements mean not a match", function () {
+example("ArrayPattern + [AM]: remaining elements mean not a match", function () {
   var arrayMatchable = new ArrayMatchable
   arrayMatchable.match = function () {
     return {
@@ -569,10 +583,10 @@ example("ArrayMatcher + [AM]: remaining elements mean not a match", function () 
     }
   }
 
-  assert( ! new ArrayMatcher(arrayMatchable).match(['something']) )
+  assert( ! new ArrayPattern(arrayMatchable).match(['something']) )
 })
 
-example("ArrayMatcher + [AM, AM]: remaining elements are send to the next", function () {
+example("ArrayPattern + [AM, AM]: remaining elements are send to the next", function () {
   var firstMatchable = new ArrayMatchable
   var secondMatchable = new ArrayMatchable
   var remaining = ['some', 'remaining']
@@ -586,12 +600,12 @@ example("ArrayMatcher + [AM, AM]: remaining elements are send to the next", func
       matched: true,
       unmatched: ['irrelevant'] } }
 
-  new ArrayMatcher(firstMatchable, secondMatchable).match(['irrelevant'])
+  new ArrayPattern(firstMatchable, secondMatchable).match(['irrelevant'])
 
   assert.equal( secondMatchable.match.called[0], remaining )
 })
 
-example("ArrayMatcher + [AM, AM]: next is not called if first is false", function () {
+example("ArrayPattern + [AM, AM]: next is not called if first is false", function () {
   var firstMatchable = new ArrayMatchable
   var secondMatchable = new ArrayMatchable
   firstMatchable.match = function () {
@@ -600,13 +614,13 @@ example("ArrayMatcher + [AM, AM]: next is not called if first is false", functio
       unmatched: [] } }
   secondMatchable.match = function () { this.called = true }
 
-  assert( ! new ArrayMatcher(firstMatchable, secondMatchable).match(['']) )
+  assert( ! new ArrayPattern(firstMatchable, secondMatchable).match(['']) )
   assert( ! secondMatchable.match.called )
 })
 
-example("ArrayMatcher[non-AM, AM]: true when existing, sends the rest to the next AM", function () {
+example("ArrayPattern[non-AM, AM]: true when existing, sends the rest to the next AM", function () {
   var arrayMatchable = new ArrayMatchable
-  var arrayMatcher = new ArrayMatcher('exactly', arrayMatchable)
+  var arrayMatcher = new ArrayPattern('exactly', arrayMatchable)
   arrayMatchable.match = function (argument) {
     this.match.argument = argument
     return {
@@ -621,13 +635,15 @@ example("ArrayMatcher[non-AM, AM]: true when existing, sends the rest to the nex
   assert.equal( arrayMatchable.match.argument.length, 1 )
 })
 
-example("ArrayMatcher[non-AM, non-AM]: true when match", function () {
-  assert( new ArrayMatcher(5, 6).match([5, 6]) )
+example("ArrayPattern[non-AM, non-AM]: true when match", function () {
+  assert( new ArrayPattern(5, 6).match([5, 6]) )
 })
 
-example("ArrayMatcher[non-AM, non-AM]: false when not a match", function () {
-  assert( ! new ArrayMatcher(5, 6).match([5, 7]) )
+example("ArrayPattern[non-AM, non-AM]: false when not a match", function () {
+  assert( ! new ArrayPattern(5, 6).match([5, 7]) )
 })
+
+
 
 // ArrayMatchable
 // ==============
@@ -635,9 +651,12 @@ example("ArrayMatcher[non-AM, non-AM]: false when not a match", function () {
 // A common parent for all descriptors of `Array` components. `ArrayMatchable`s
 // have a slightly different interface than regular `Matchable`s because they
 // need to send back the chunk of the Array that wasn't consumed by the current
-// pattern so that the `ArrayMatcher` can forward it to the next
+// pattern so that the `ArrayPattern` can forward it to the next
 // `ArrayMatchable`.
+//
 var ArrayMatchable = function () {}
+
+
 
 // ArrayElement
 // ============
@@ -657,6 +676,7 @@ var ArrayMatchable = function () {}
 // result.matched; // => true
 // result.unmatched; // => ['extra']
 // ```
+//
 var ArrayElement = function (matchable) {
   this.matchable = matchable
 }
@@ -690,6 +710,8 @@ example("ArrayElement: encapsulates any Matchable", function () {
   assert.equal( result.unmatched[0], 'extra' )
 })
 
+
+
 // ArrayWildcard
 // =============
 //
@@ -705,12 +727,16 @@ example("ArrayElement: encapsulates any Matchable", function () {
 // result.matched; // => true
 // result.unmatched; // => ['extra']
 // ```
+//
 var ArrayWildcard = function () {}
 
 ArrayWildcard.prototype = new ArrayMatchable
 
 ArrayWildcard.prototype.match = function (array) {
-  return array.length > 0
+  return {
+    matched: array.length > 0,
+    unmatched: array.slice(1)
+  }
 }
 
 example("ArrayWildcard is a ArrayMatchable", function () {
@@ -718,12 +744,21 @@ example("ArrayWildcard is a ArrayMatchable", function () {
 })
 
 example("ArrayWildcard: false if empty", function () {
-  assert( ! new ArrayWildcard().match([]) )
+  assert( ! new ArrayWildcard().match([]).matched )
 })
 
 example("ArrayWildcard: true if non empty", function () {
-  assert( new ArrayWildcard().match(['something']) )
+  assert( new ArrayWildcard().match(['something']).matched )
 })
+
+example("ArrayWildcard: unmatched has the rest of the array", function () {
+  var result = new ArrayWildcard().match(['more', 'than', 'one'])
+  assert.equal( result.unmatched.length, 2 )
+  assert.equal( result.unmatched[0], 'than' )
+  assert.equal( result.unmatched[1], 'one' )
+})
+
+
 
 // ArrayEllipsis
 // =============
@@ -758,6 +793,7 @@ example("ArrayWildcard: true if non empty", function () {
 // result.matched; // => true
 // result.unmatched; // => ['extra']
 // ```
+//
 var ArrayEllipsis = function (termination) {
   this.termination = termination
 }
@@ -833,10 +869,10 @@ module.exports = {
   WildcardProperty: WildcardProperty,
   ExactProperty: ExactProperty,
   Negator: Negator,
-  ObjectMatcher: ObjectMatcher,
+  ObjectPattern: ObjectPattern,
   WildcardValue: WildcardValue,
   TypedValue: TypedValue,
-  ArrayMatcher: ArrayMatcher,
+  ArrayPattern: ArrayPattern,
   ArrayElement: ArrayElement,
   ArrayWildcard: ArrayWildcard,
   ArrayEllipsis: ArrayEllipsis

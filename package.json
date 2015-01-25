@@ -1,6 +1,7 @@
 {
   "name": "sydney.js",
   "scripts": {
+    "doc": "locco --adapter=markdown --source=**/*.js --adapter-readme=sydney.js",
     "test": "washington sydney.js"
   },
   "repository": {
@@ -19,7 +20,11 @@
   },
   "homepage": "https://github.com/xaviervia/sydney",
   "version": "0.0.1",
+  "devDependencies": {
+    "locco": "1.0.2",
+    "locco-markdown": "0.0.2"
+  },
   "dependencies": {
-    "washington": "^0.7.1"
+    "washington": "0.7.1"
   }
 }
