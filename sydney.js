@@ -1,14 +1,106 @@
 var example   = require("washington")
 var assert    = require("assert")
 
-var Matchables = require("./src/matchables")
+/*
 
-example("Async: by default")
+If the callback is by default a filter over the execution of the contained subscriptions... we should I
 
-example("Endpoint: match with glob style wildcards")
+*/
+//
+//
+// new Sydney(function (event, venue) {
+//   venue.run(event)
+// }, { name: "context" })
+//
+//
+// Sydney({
+//   match: function (event, venue) {
+//     venue.run(event)
+//   }
+// }, function () {}, { name: "context" })
+var Sydney = function (endpoint, callback, context) {
+  this.endpoint = endpoint
+  this.callback = callback
+  this.context  = context
+}
 
-example("Repeater: Repeat events back and forth on repeater venue")
+Sydney.prototype.run = function () {
+  if (process && process.nextTick)
+    process.nextTick(function () {
+      this.callback.call(this.context)
+    }.bind(this))
+  else
+    setImmediate(function () {
+      this.callback.call(this.context)
+    }.bind(this))
+}
 
-example("Repeater: Scope out prefix when sending to repeater")
+example("Call async by default", function (done) {
+  var value   = false
+  var sydney  = new Sydney(
+    { match: function () { return true } },
+    function () { value = this.value },
+    { value: true }
+  )
+  sydney.run()
 
-example("Repeater: Add prefix when receiving from repeater")
+  if (value)
+    throw new Error("Should be async")
+
+  process.nextTick(function () {
+    done( value ? null : new Error("Should be run by now") )
+  })
+})
+
+example("Call with setImmediate if process.nextTick is not available", function (done) {
+  var value   = false
+  var sydney  = new Sydney(
+    { match: function () { return true } },
+    function () { value = this.value },
+    { value: true }
+  )
+  var nextTick = process.nextTick
+  process.nextTick = null
+
+  sydney.run()
+
+  process.nextTick = nextTick
+
+  if (value)
+    throw new Error("Should be async")
+
+  process.nextTick(function () {
+    done( value ? new Error("Should not be run yet") : null )
+  })
+
+  setImmediate(function () {
+    done( value ? null : new Error("Should be run by now") )
+  })
+})
+
+example("Call with setTimeout if setImmediate is not available", function (done) {
+  throw new Error("How to test this disabling the global setImmediate")
+  var value   = false
+  var sydney  = new Sydney(
+    { match: function () { return true } },
+    function () { value = this.value },
+    { value: true }
+  )
+  var nextTick = process.nextTick
+  process.nextTick = null
+
+  sydney.run()
+
+  process.nextTick = nextTick
+
+  if (value)
+    throw new Error("Should be async")
+
+  process.nextTick(function () {
+    done( value ? new Error("Should not be run yet") : null )
+  })
+
+  setImmediate(function () {
+    done( value ? null : new Error("Should be run by now") )
+  })
+})

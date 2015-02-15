@@ -25,6 +25,7 @@
     "locco-markdown": "0.0.2"
   },
   "dependencies": {
+    "object-pattern": "0.0.1",
     "washington": "0.7.1"
   }
 }
