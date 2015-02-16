@@ -29,8 +29,12 @@ Sydney.prototype.run = function () {
     process.nextTick(function () {
       this.callback.call(this.context)
     }.bind(this))
-  else
+  else if (setImmediate)
     setImmediate(function () {
+      this.callback.call(this.context)
+    }.bind(this))
+  else
+    setTimeout(function () {
       this.callback.call(this.context)
     }.bind(this))
 }
@@ -79,7 +83,6 @@ example("Call with setImmediate if process.nextTick is not available", function 
 })
 
 example("Call with setTimeout if setImmediate is not available", function (done) {
-  throw new Error("How to test this disabling the global setImmediate")
   var value   = false
   var sydney  = new Sydney(
     { match: function () { return true } },
@@ -87,11 +90,14 @@ example("Call with setTimeout if setImmediate is not available", function (done)
     { value: true }
   )
   var nextTick = process.nextTick
+  var setImmediate = global.setImmediate
   process.nextTick = null
-
+  global.setImmediate = null
+  
   sydney.run()
 
   process.nextTick = nextTick
+  global.setImmediate = setImmediate
 
   if (value)
     throw new Error("Should be async")
@@ -101,6 +107,10 @@ example("Call with setTimeout if setImmediate is not available", function (done)
   })
 
   setImmediate(function () {
-    done( value ? null : new Error("Should be run by now") )
+    done( value ? new Error("Should not be run yet") : null )
   })
+
+  setTimeout(function () {
+    done( value ? null : new Error("Should have been run by now") )
+  }, 0)
 })
