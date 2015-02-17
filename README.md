@@ -12,6 +12,13 @@ Event [Subscription]()/[Venue]() library. Whole new approach:
   it provides suppport for any object structure to be used as key to
   describe the event.
 
+Installation
+------------
+
+```shell
+npm install --save sydney
+```
+
 License
 -------
 

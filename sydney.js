@@ -12,6 +12,13 @@
 //   it provides suppport for any object structure to be used as key to
 //   describe the event.
 //
+// Installation
+// ------------
+//
+// ```shell
+// npm install --save sydney
+// ```
+//
 var Sydney = function (endpoint, callback, context) {
   this.endpoint = endpoint
   this.callback = callback
