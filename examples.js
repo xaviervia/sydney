@@ -100,7 +100,22 @@ example("notify: should not run if it does not match", function (done) {
 })
 
 
-example("notify: forwards the event")
+example("notify: forwards the event", function (done) {
+  var value     = false
+  var someEvent = { content: "text" }
+  var venue     = new Sydney(
+    { match: function () { return true } },
+    function (event) { value = event },
+    {}
+  )
+
+  venue.notify(someEvent)
+
+  process.nextTick(function () {
+    done( value === someEvent ?
+      null : Error("Should have been the event") )
+  })
+})
 
 
 example("nofify: calls with the proper context")
