@@ -6,11 +6,8 @@
 // Event [Subscription]()/[Venue]() library. Whole new approach:
 //
 // - Asynchronous emission only.
-// - Callbacks are middlewares. Propagation in the Venue is mediated by
+// - The venue is a middlewares. Propagation in the venue is mediated by
 //   the main callback.
-// - String named events are replaced by Endpoint objects that are expected to //   expose a `match` method. Used in conjunction with [`object-pattern`](),
-//   it provides suppport for any object structure to be used as key to
-//   describe the event.
 //
 // Installation
 // ------------
@@ -19,30 +16,54 @@
 // npm install --save sydney
 // ```
 //
-var Sydney = function (endpoint, callback, context) {
-  this.endpoint = endpoint
-  this.callback = callback
-  this.context  = context
-}
 
-Sydney.prototype.notify = function (event) {
-  if (!this.match()) return
+"use strict";
 
-  var deferred = function () {
-    this.callback.call(this.context, event)
-  }.bind(this)
+(function (name, definition) {
 
-  if (process && process.nextTick) process.nextTick(deferred)
-  else if (setImmediate) setImmediate(deferred)
-  else setTimeout(deferred, 0)
-}
+  //! AMD
+  if (typeof define === 'function')
+    define(definition)
 
-Sydney.prototype.match = function (event) {
-  return this.endpoint.match(event)
-}
+  //! CommonJS
+  else if (typeof module !== 'undefined' && module.exports)
+    module.exports = definition()
 
-module.exports = Sydney
+  //! Browser
+  else {
+    var theModule = definition(), global = window, old = global[name];
 
+    theModule.noConflict = function () {
+      global[name] = old;
+      return theModule;
+    }
+
+    global[name] = theModule
+  }
+
+})('Sydney', function () {
+
+  var Sydney = function (callback) {
+    if (!(this instanceof Sydney)) return new Sydney(callback)
+
+    this.callback = callback
+
+    this.subscribers = []
+  }
+
+
+  Sydney.prototype.send = function (event) {
+    var callback = function () { this.callback(event, this) }.bind(this)
+
+    if (process && process.nextTick) process.nextTick(callback)
+    else if (setImmediate) setImmediate(callback)
+    else setTimeout(callback, 0)
+  }
+
+
+  return Sydney
+
+})
 // License
 // -------
 //
