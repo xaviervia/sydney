@@ -20,7 +20,7 @@
     "url": "https://github.com/xaviervia/sydney/issues"
   },
   "homepage": "https://github.com/xaviervia/sydney",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "devDependencies": {
     "locco": "1.0.2",
     "locco-markdown": "0.0.2",
