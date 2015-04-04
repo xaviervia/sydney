@@ -1,5 +1,6 @@
 {
-  "name": "sydney.js",
+  "name": "sydney",
+  "main": "sydney.js",
   "scripts": {
     "doc": "locco --adapter=markdown --source=**/*.js --adapter-readme=sydney.js",
     "test": "washington examples"
