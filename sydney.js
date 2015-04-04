@@ -61,6 +61,14 @@
   }
 
 
+  Sydney.prototype.add = function (subscriber) {
+    if (subscriber instanceof Function)
+      subscriber = new Sydney(subscriber)
+    
+    this.subscribers.push(subscriber)
+  }
+
+
   return Sydney
 
 })
