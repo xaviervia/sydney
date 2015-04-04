@@ -72,6 +72,16 @@
   }
 
 
+  Sydney.prototype.find = function (toBeFound) {
+    var index   = 0
+    var length  = this.subscribers.length
+
+    for (; index < length; index ++)
+      if (this.subscribers[index].callback === toBeFound)
+        return this.subscribers[index]
+  }
+
+
   Sydney.prototype.add = function (subscriber) {
     if (subscriber instanceof Function)
       subscriber = new Sydney(subscriber)
@@ -101,6 +111,18 @@
     this.add(toBeLinked)
 
     toBeLinked.add(this)
+
+    return this
+  }
+
+
+  Sydney.prototype.unlink = function (toBeUnlinked) {
+    if (toBeUnlinked instanceof Function)
+      toBeUnlinked = this.find(toBeUnlinked)
+
+    toBeUnlinked.remove(this)
+
+    this.remove(toBeUnlinked)
 
     return this
   }
