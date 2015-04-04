@@ -63,6 +63,15 @@
   }
 
 
+  Sydney.prototype.broadcast = function (event) {
+    this.subscribers.forEach(function (subscriber) {
+      subscriber.send(event)
+    })
+
+    return this
+  }
+
+
   Sydney.prototype.add = function (subscriber) {
     if (subscriber instanceof Function)
       subscriber = new Sydney(subscriber)
