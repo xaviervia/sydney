@@ -6,21 +6,25 @@ let example = require("washington")
 let Sydney  = require("../sydney")
 
 
-example("#add: add the Sydney venue as subscriber", function () {
+example("#remove: remove the subscriber", function () {
   let venue       = new Sydney
   let subscriber  = new Sydney
 
   venue.add(subscriber)
 
-  return venue.subscribers[0] === subscriber
+  venue.remove(subscriber)
+
+  return venue.subscribers.length === 0
 })
 
 
-example("#add: add the callback as Sydney venue subscriber", function () {
+example("#remove: remove the subscriber with this callback", function () {
   let venue       = new Sydney
   let subscriber  = function () {}
 
   venue.add(subscriber)
 
-  return venue.subscribers[0].callback === subscriber
+  venue.remove(subscriber)
+
+  return venue.subscribers.length === 0
 })

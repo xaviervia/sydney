@@ -64,8 +64,18 @@
   Sydney.prototype.add = function (subscriber) {
     if (subscriber instanceof Function)
       subscriber = new Sydney(subscriber)
-    
+
     this.subscribers.push(subscriber)
+  }
+
+
+  Sydney.prototype.remove = function (toBeRemoved) {
+    this.subscribers = this.subscribers.filter(function (subscriber) {
+      if (toBeRemoved instanceof Function)
+        return subscriber.callback !== toBeRemoved
+
+      return subscriber !== toBeRemoved
+    })
   }
 
 
