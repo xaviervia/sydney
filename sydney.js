@@ -94,6 +94,18 @@
   }
 
 
+  Sydney.prototype.link = function (toBeLinked) {
+    if (toBeLinked instanceof Function)
+      toBeLinked = new Sydney(toBeLinked)
+
+    this.add(toBeLinked)
+
+    toBeLinked.add(this)
+
+    return this
+  }
+
+
   return Sydney
 
 })
