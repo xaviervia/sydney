@@ -2,13 +2,13 @@
 "use strict"
 
 
-let example = require("washington")
-let Sydney  = require("../sydney")
+var example = require("washington")
+var Sydney  = require("../sydney")
 
 
 example("#broadcast: send to the subscriber", function (check) {
-  let venue = new Sydney
-  let event = { name: "event" }
+  var venue = new Sydney
+  var event = { name: "event" }
 
   venue.add(function (e) { check(e, event) })
 
@@ -17,8 +17,8 @@ example("#broadcast: send to the subscriber", function (check) {
 
 
 example("#broadcast: chainable", function () {
-  let venue = new Sydney
-  let event = { name: "event" }
+  var venue = new Sydney
+  var event = { name: "event" }
 
   venue.add(function () {})
 

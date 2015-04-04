@@ -2,13 +2,13 @@
 "use strict"
 
 
-let example = require("washington")
-let Sydney  = require("../sydney")
+var example = require("washington")
+var Sydney  = require("../sydney")
 
 
 example("#send: run after a tick", function (check) {
-  let value = false
-  let venue = new Sydney(function () {
+  var value = false
+  var venue = new Sydney(function () {
     value = true
   })
 
@@ -23,9 +23,9 @@ example("#send: run after a tick", function (check) {
 
 
 example("#send: run with immediate if there is no tick", function (check) {
-  let value = false
-  let nextTick = process.nextTick
-  let venue = new Sydney(function () {
+  var value = false
+  var nextTick = process.nextTick
+  var venue = new Sydney(function () {
     value = true
   })
 
@@ -48,10 +48,10 @@ example("#send: run with immediate if there is no tick", function (check) {
 
 
 example("#send: run with timeout if no other choice", function (check) {
-  let value           = false
-  let nextTick        = process.nextTick
+  var value           = false
+  var nextTick        = process.nextTick
   var setImmediate    = global.setImmediate
-  let venue           = new Sydney(function () {
+  var venue           = new Sydney(function () {
     value = true
   })
 
@@ -80,7 +80,7 @@ example("#send: run with timeout if no other choice", function (check) {
 
 
 example("#send: send the event to the callback", function (check) {
-  let event = { name: "event" }
+  var event = { name: "event" }
 
   new Sydney(function (e) {
     check(e, event)
@@ -89,8 +89,8 @@ example("#send: send the event to the callback", function (check) {
 
 
 example("#send: send the venue to the callback", function (check) {
-  let event = { name: "event" }
-  let venue = new Sydney(function (e, v) {
+  var event = { name: "event" }
+  var venue = new Sydney(function (e, v) {
     check(v, venue)
   })
 
@@ -99,8 +99,8 @@ example("#send: send the venue to the callback", function (check) {
 
 
 example("#send: preserve the binding of the callback", function (check) {
-  let context = { value: { name: "some value" } }
-  let callback = function () {
+  var context = { value: { name: "some value" } }
+  var callback = function () {
     check(this.value, context.value)
   }.bind(context)
 
@@ -109,7 +109,7 @@ example("#send: preserve the binding of the callback", function (check) {
 
 
 example("#send: chainable", function () {
-  let venue = new Sydney(function () {})
+  var venue = new Sydney(function () {})
 
   return venue.send() === venue
 })

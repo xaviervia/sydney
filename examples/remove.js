@@ -2,13 +2,13 @@
 "use strict"
 
 
-let example = require("washington")
-let Sydney  = require("../sydney")
+var example = require("washington")
+var Sydney  = require("../sydney")
 
 
 example("#remove: remove the subscriber", function () {
-  let venue       = new Sydney
-  let subscriber  = new Sydney
+  var venue       = new Sydney
+  var subscriber  = new Sydney
 
   venue.add(subscriber)
 
@@ -19,8 +19,8 @@ example("#remove: remove the subscriber", function () {
 
 
 example("#remove: remove the subscriber with this callback", function () {
-  let venue       = new Sydney
-  let subscriber  = function () {}
+  var venue       = new Sydney
+  var subscriber  = function () {}
 
   venue.add(subscriber)
 
@@ -31,8 +31,8 @@ example("#remove: remove the subscriber with this callback", function () {
 
 
 example("#remove: chainable", function () {
-  let venue       = new Sydney
-  let subscriber  = function () {}
+  var venue       = new Sydney
+  var subscriber  = function () {}
 
   venue.add(subscriber)
 

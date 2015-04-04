@@ -1,15 +1,14 @@
 
-
 "use strict"
 
 
-let example = require("washington")
-let Sydney  = require("../sydney")
+var example = require("washington")
+var Sydney  = require("../sydney")
 
 
 example("#unlink: remove from venue", function () {
-  let mother    = new Sydney
-  let daughter  = new Sydney
+  var mother    = new Sydney
+  var daughter  = new Sydney
 
   mother.link(daughter)
 
@@ -20,8 +19,8 @@ example("#unlink: remove from venue", function () {
 
 
 example("#unlink: remove venue from subscriber", function () {
-  let mother    = new Sydney
-  let daughter  = new Sydney
+  var mother    = new Sydney
+  var daughter  = new Sydney
 
   mother.link(daughter)
 
@@ -32,8 +31,8 @@ example("#unlink: remove venue from subscriber", function () {
 
 
 example("#unlink: @function remove from venue", function () {
-  let mother            = new Sydney
-  let daughterCallback  = function () {}
+  var mother            = new Sydney
+  var daughterCallback  = function () {}
 
   mother.link(daughterCallback)
 
@@ -44,9 +43,9 @@ example("#unlink: @function remove from venue", function () {
 
 
 example("#unlink: @function remove venue from subscriber", function () {
-  let mother            = new Sydney
-  let daughterCallback  = function () {}
-  let daughter          = undefined
+  var mother            = new Sydney
+  var daughterCallback  = function () {}
+  var daughter          = undefined
 
   mother.link(daughterCallback)
 
@@ -59,8 +58,8 @@ example("#unlink: @function remove venue from subscriber", function () {
 
 
 example("#unlink: chainable", function () {
-  let mother    = new Sydney
-  let daughter  = new Sydney
+  var mother    = new Sydney
+  var daughter  = new Sydney
 
   mother.link(daughter)
 

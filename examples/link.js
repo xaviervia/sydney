@@ -2,13 +2,13 @@
 "use strict"
 
 
-let example = require("washington")
-let Sydney  = require("../sydney")
+var example = require("washington")
+var Sydney  = require("../sydney")
 
 
 example("#link: add as subscriber", function () {
-  let mother    = new Sydney
-  let daughter  = new Sydney
+  var mother    = new Sydney
+  var daughter  = new Sydney
 
   mother.link(daughter)
 
@@ -17,8 +17,8 @@ example("#link: add as subscriber", function () {
 
 
 example("#link: subscribe back the venue", function () {
-  let mother    = new Sydney
-  let daughter  = new Sydney
+  var mother    = new Sydney
+  var daughter  = new Sydney
 
   mother.link(daughter)
 
@@ -27,8 +27,8 @@ example("#link: subscribe back the venue", function () {
 
 
 example("#link: @function create venue and add as subscriber", function () {
-  let mother            = new Sydney
-  let daughterCallback  = function () {}
+  var mother            = new Sydney
+  var daughterCallback  = function () {}
 
   mother.link(daughterCallback)
 
@@ -37,8 +37,8 @@ example("#link: @function create venue and add as subscriber", function () {
 
 
 example("#link: @function subscribe back the venue", function () {
-  let mother            = new Sydney
-  let daughterCallback  = function () {}
+  var mother            = new Sydney
+  var daughterCallback  = function () {}
 
   mother.link(daughterCallback)
 
@@ -47,7 +47,7 @@ example("#link: @function subscribe back the venue", function () {
 
 
 example("#link: chainable", function () {
-  let mother = new Sydney
+  var mother = new Sydney
 
   return mother.link(function () {}) === mother
 })

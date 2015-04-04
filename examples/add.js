@@ -2,13 +2,13 @@
 "use strict"
 
 
-let example = require("washington")
-let Sydney  = require("../sydney")
+var example = require("washington")
+var Sydney  = require("../sydney")
 
 
 example("#add: add the Sydney venue as subscriber", function () {
-  let venue       = new Sydney
-  let subscriber  = new Sydney
+  var venue       = new Sydney
+  var subscriber  = new Sydney
 
   venue.add(subscriber)
 
@@ -17,8 +17,8 @@ example("#add: add the Sydney venue as subscriber", function () {
 
 
 example("#add: add the callback as Sydney venue subscriber", function () {
-  let venue       = new Sydney
-  let subscriber  = function () {}
+  var venue       = new Sydney
+  var subscriber  = function () {}
 
   venue.add(subscriber)
 
@@ -27,8 +27,8 @@ example("#add: add the callback as Sydney venue subscriber", function () {
 
 
 example("#add: chainable", function () {
-  let venue       = new Sydney
-  let subscriber  = function () {}
+  var venue       = new Sydney
+  var subscriber  = function () {}
 
   return venue.add(subscriber) === venue
 })

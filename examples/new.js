@@ -2,12 +2,12 @@
 "use strict"
 
 
-let example = require("washington")
-let Sydney  = require("../sydney")
+var example = require("washington")
+var Sydney  = require("../sydney")
 
 
 example("#new: takes a callback", function () {
-  let callback = function () {}
+  var callback = function () {}
 
   return new Sydney(callback).callback === callback
 })
