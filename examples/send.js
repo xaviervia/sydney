@@ -81,7 +81,7 @@ example("#send: run with timeout if no other choice", function (check) {
 
 example("#send: send the event to the callback", function (check) {
   let event = { name: "event" }
-  
+
   new Sydney(function (e) {
     check(e, event)
   }).send(event)
@@ -105,4 +105,11 @@ example("#send: preserve the binding of the callback", function (check) {
   }.bind(context)
 
   new Sydney(callback).send()
+})
+
+
+example("#send: chainable", function () {
+  let venue = new Sydney(function () {})
+
+  return venue.send() === venue
 })

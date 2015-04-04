@@ -24,3 +24,11 @@ example("#add: add the callback as Sydney venue subscriber", function () {
 
   return venue.subscribers[0].callback === subscriber
 })
+
+
+example("#add: chainable", function () {
+  let venue       = new Sydney
+  let subscriber  = function () {}
+
+  return venue.add(subscriber) === venue
+})

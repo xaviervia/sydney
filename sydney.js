@@ -58,6 +58,8 @@
     if (process && process.nextTick) process.nextTick(callback)
     else if (setImmediate) setImmediate(callback)
     else setTimeout(callback, 0)
+
+    return this
   }
 
 
@@ -66,6 +68,8 @@
       subscriber = new Sydney(subscriber)
 
     this.subscribers.push(subscriber)
+
+    return this
   }
 
 
@@ -76,6 +80,8 @@
 
       return subscriber !== toBeRemoved
     })
+
+    return this
   }
 
 

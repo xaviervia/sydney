@@ -28,3 +28,13 @@ example("#remove: remove the subscriber with this callback", function () {
 
   return venue.subscribers.length === 0
 })
+
+
+example("#remove: chainable", function () {
+  let venue       = new Sydney
+  let subscriber  = function () {}
+
+  venue.add(subscriber)
+
+  return venue.remove(subscriber) === venue
+})
