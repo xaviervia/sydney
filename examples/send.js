@@ -99,12 +99,26 @@ example("#send: send the venue to the callback", function (check) {
 
 
 example("#send: preserve the binding of the callback", function (check) {
-  var context = { value: { name: "some value" } }
-  var callback = function () {
+  var context   = { value: { name: "some value" } }
+  var callback  = function () {
     check(this.value, context.value)
   }.bind(context)
 
   new Sydney(callback).send()
+})
+
+
+example("#send: @endpoint should not call if doesn't match", function (check) {
+  var context   = { value: { name: "some value" } }
+  var endpoint  = { match: function () { return false } }
+  var called    = false
+  var callback  = function () { called = true }
+
+  new Sydney(endpoint, callback).send()
+
+  process.nextTick(function () {
+    check(! called)
+  })
 })
 
 

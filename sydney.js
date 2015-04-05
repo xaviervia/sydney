@@ -60,6 +60,8 @@
   Sydney.prototype.send = function (event) {
     var callback = function () { this.callback(event, this) }.bind(this)
 
+    if (this.endpoint && ! this.endpoint.match(event)) return this
+
     if (process && process.nextTick) process.nextTick(callback)
     else if (setImmediate) setImmediate(callback)
     else setTimeout(callback, 0)
