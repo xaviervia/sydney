@@ -105,6 +105,9 @@
       if (toBeRemoved instanceof Function)
         return subscriber.callback !== toBeRemoved
 
+      else if (toBeRemoved.match instanceof Function)
+        return subscriber.endpoint !== toBeRemoved
+
       return subscriber !== toBeRemoved
     })
 
