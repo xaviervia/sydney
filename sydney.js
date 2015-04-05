@@ -115,13 +115,14 @@
   }
 
 
-  Sydney.prototype.link = function (toBeLinked) {
-    if (toBeLinked instanceof Function)
-      toBeLinked = new Sydney(toBeLinked)
+  Sydney.prototype.link = function (first, second) {
+    if (second) first = new Sydney(first, second)
 
-    this.add(toBeLinked)
+    else if (first instanceof Function) first = new Sydney(first)
 
-    toBeLinked.add(this)
+    this.add(first)
+
+    first.add(this)
 
     return this
   }

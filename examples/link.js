@@ -16,7 +16,7 @@ example("#link: add as subscriber", function () {
 })
 
 
-example("#link: subscribe back the venue", function () {
+example("#link: subscribe back", function () {
   var mother    = new Sydney
   var daughter  = new Sydney
 
@@ -36,11 +36,44 @@ example("#link: @function create venue and add as subscriber", function () {
 })
 
 
-example("#link: @function subscribe back the venue", function () {
+example("#link: @function subscribe back", function () {
   var mother            = new Sydney
   var daughterCallback  = function () {}
 
   mother.link(daughterCallback)
+
+  return mother.subscribers[0].subscribers[0] === mother
+})
+
+
+example("#link: @endpoint create venue and add endpoint", function () {
+  var mother            = new Sydney
+  var endpoint          = { match: function () {} }
+  var daughterCallback  = function () {}
+
+  mother.link(endpoint, daughterCallback)
+
+  return mother.subscribers[0].endpoint === endpoint
+})
+
+
+example("#link: @endpoint create venue and add callback", function () {
+  var mother            = new Sydney
+  var endpoint          = { match: function () {} }
+  var callback          = function () {}
+
+  mother.link(endpoint, callback)
+
+  return mother.subscribers[0].callback === callback
+})
+
+
+example("#link: @endpoint subscribe back", function () {
+  var mother            = new Sydney
+  var endpoint          = { match: function () {} }
+  var callback          = function () {}
+
+  mother.link(endpoint, callback)
 
   return mother.subscribers[0].subscribers[0] === mother
 })
