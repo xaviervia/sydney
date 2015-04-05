@@ -18,6 +18,24 @@ example("#new: initializes the subscribers array", function () {
 })
 
 
+example("#new: @endpoint endpoint is first argument", function () {
+  var endpoint = { match: function () {} }
+  var callback = function () {}
+  var venue = new Sydney(endpoint, callback)
+
+  return venue.endpoint === endpoint
+})
+
+
+example("#new: @endpoint callback is second argument", function () {
+  var endpoint = { match: function () {} }
+  var callback = function () {}
+  var venue = new Sydney(endpoint, callback)
+
+  return venue.callback === callback
+})
+
+
 example("#Sydney: no need for new", function () {
   return Sydney() instanceof Sydney
 })

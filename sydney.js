@@ -43,10 +43,15 @@
 
 })('Sydney', function () {
 
-  var Sydney = function (callback) {
-    if (!(this instanceof Sydney)) return new Sydney(callback)
+  var Sydney = function (first, second) {
+    if (!(this instanceof Sydney)) return new Sydney(first, second)
 
-    this.callback = callback
+    if (second) {
+      this.endpoint = first
+      this.callback = second
+    }
+
+    else this.callback = first
 
     this.subscribers = []
   }
