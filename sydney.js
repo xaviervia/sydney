@@ -82,7 +82,9 @@
     var length  = this.subscribers.length
 
     for (; index < length; index ++)
-      if (this.subscribers[index].callback === toBeFound)
+      if (this.subscribers[index].callback === toBeFound ||
+          this.subscribers[index].endpoint === toBeFound ||
+          this.subscribers[index] === toBeFound)
         return this.subscribers[index]
   }
 
@@ -129,8 +131,7 @@
 
 
   Sydney.prototype.unlink = function (toBeUnlinked) {
-    if (toBeUnlinked instanceof Function)
-      toBeUnlinked = this.find(toBeUnlinked)
+    toBeUnlinked = this.find(toBeUnlinked)
 
     toBeUnlinked.remove(this)
 

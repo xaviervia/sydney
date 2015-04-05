@@ -57,6 +57,35 @@ example("#unlink: @function remove venue from subscriber", function () {
 })
 
 
+example("#unlink: @endpoint remove from venue", function () {
+  var mother            = new Sydney
+  var endpoint          = { match: function () {} }
+  var daughterCallback  = function () {}
+
+  mother.link(endpoint, daughterCallback)
+
+  mother.unlink(endpoint)
+
+  return mother.subscribers.length === 0
+})
+
+
+example("#unlink: @endpoint remove venue from subscriber", function () {
+  var mother            = new Sydney
+  var endpoint          = { match: function () {} }
+  var daughterCallback  = function () {}
+  var daughter          = undefined
+
+  mother.link(endpoint, daughterCallback)
+
+  daughter = mother.find(daughterCallback)
+
+  mother.unlink(endpoint)
+
+  return daughter.subscribers.length === 0
+})
+
+
 example("#unlink: chainable", function () {
   var mother    = new Sydney
   var daughter  = new Sydney
