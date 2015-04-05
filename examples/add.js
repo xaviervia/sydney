@@ -26,6 +26,28 @@ example("#add: add the callback as Sydney venue subscriber", function () {
 })
 
 
+example("#add: @endpoint first argument used as endpoint", function () {
+  var venue       = new Sydney
+  var endpoint    = { match: function () {} }
+  var subscriber  = function () {}
+
+  venue.add(endpoint, subscriber)
+
+  return venue.subscribers[0].endpoint === endpoint
+})
+
+
+example("#add: @endpoint second argument used as callback", function () {
+  var venue       = new Sydney
+  var endpoint    = { match: function () {} }
+  var subscriber  = function () {}
+
+  venue.add(endpoint, subscriber)
+
+  return venue.subscribers[0].callback === subscriber
+})
+
+
 example("#add: chainable", function () {
   var venue       = new Sydney
   var subscriber  = function () {}
