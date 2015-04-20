@@ -52,8 +52,6 @@
     }
 
     else this.callback = first
-
-    this.subscribers = []
   }
 
 
@@ -71,7 +69,7 @@
 
 
   Sydney.prototype.broadcast = function (event) {
-    this.subscribers.forEach(function (subscriber) {
+    (this.subscribers = this.subscribers || []).forEach(function (subscriber) {
       subscriber.send(event)
     })
 
@@ -81,7 +79,7 @@
 
   Sydney.prototype.find = function (toBeFound) {
     var index   = 0
-    var length  = this.subscribers.length
+    var length  = (this.subscribers = this.subscribers || []).length
 
     for (; index < length; index ++)
       if (this.subscribers[index].callback === toBeFound ||
@@ -92,6 +90,8 @@
 
 
   Sydney.prototype.add = function (first, second) {
+    this.subscribers = this.subscribers || []
+
     if (second) this.subscribers.push(new Sydney(first, second))
 
     else {
@@ -105,6 +105,8 @@
 
 
   Sydney.prototype.remove = function (toBeRemoved) {
+    this.subscribers = this.subscribers || []
+
     this.subscribers = this.subscribers.filter(function (subscriber) {
       if (toBeRemoved instanceof Function)
         return subscriber.callback !== toBeRemoved
@@ -135,9 +137,11 @@
   Sydney.prototype.unlink = function (toBeUnlinked) {
     toBeUnlinked = this.find(toBeUnlinked)
 
-    toBeUnlinked.remove(this)
+    if (toBeUnlinked) {
+      toBeUnlinked.remove(this)
 
-    this.remove(toBeUnlinked)
+      this.remove(toBeUnlinked)
+    }
 
     return this
   }

@@ -94,3 +94,8 @@ example("#unlink: chainable", function () {
 
   return mother.unlink(daughter) === mother
 })
+
+
+example("#unlink: @no-subscribers won't fail", function () {
+  new Sydney().unlink(new Sydney)
+})

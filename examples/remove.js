@@ -51,3 +51,8 @@ example("#remove: chainable", function () {
 
   return venue.remove(subscriber) === venue
 })
+
+
+example("#remove: @no-subscribers won't fail", function () {
+  new Sydney().remove(function () {})
+})

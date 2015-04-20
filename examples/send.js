@@ -127,3 +127,8 @@ example("#send: chainable", function () {
 
   return venue.send() === venue
 })
+
+
+example("#send: @no-subscribers won't fail", function () {
+  new Sydney().send()
+})

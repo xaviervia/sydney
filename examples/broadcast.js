@@ -24,3 +24,8 @@ example("#broadcast: chainable", function () {
 
   return venue.broadcast(event) === venue
 })
+
+
+example("#broadcast: @no-subscribers won't fail", function () {
+  new Sydney().broadcast()
+})

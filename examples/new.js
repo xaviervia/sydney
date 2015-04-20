@@ -13,8 +13,8 @@ example("#new: takes a callback", function () {
 })
 
 
-example("#new: initializes the subscribers array", function () {
-  return new Sydney().subscribers instanceof Array
+example("#new: @regression does not initialize subscribers", function () {
+  return new Sydney().subscribers === undefined
 })
 
 
