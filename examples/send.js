@@ -172,3 +172,19 @@ example("#send: not @autobroadcast when no callback and is not a match", functio
     check()
   })
 })
+
+
+example("#send: not @autobroadcast when there is callback", function (check) {
+  var theEvent = { name: "event" }
+  var venue    = new Sydney(function () {})
+
+  venue.add(function (event, venue) {
+    check("Should not have broadcasted")
+  })
+
+  venue.send(theEvent)
+
+  process.nextTick(function () {
+    check()
+  })
+})
