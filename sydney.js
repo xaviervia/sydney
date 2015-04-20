@@ -51,18 +51,27 @@
       this.callback = second
     }
 
-    else this.callback = first
+    else
+      if (first)
+        if (first.match) this.endpoint = first
+        else this.callback = first
   }
 
 
   Sydney.prototype.send = function (event) {
-    var callback = function () { this.callback(event, this) }.bind(this)
+    var callback = undefined
+
+    if (this.callback)
+      callback = function () { this.callback(event, this) }.bind(this)
+
+    else callback = function () { this.broadcast(event) }.bind(this)
 
     if (this.endpoint && ! this.endpoint.match(event)) return this
 
     if (process && process.nextTick) process.nextTick(callback)
     else if (setImmediate) setImmediate(callback)
     else setTimeout(callback, 0)
+
 
     return this
   }

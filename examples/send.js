@@ -132,3 +132,43 @@ example("#send: chainable", function () {
 example("#send: @no-subscribers won't fail", function () {
   new Sydney().send()
 })
+
+
+example("#send: @autobroadcast when no endpoint or callback", function (check) {
+  var venue     = new Sydney
+  var theEvent  = { name: "event" }
+
+  venue.add(function (event, venue) {
+    check(event, theEvent)
+  })
+
+  venue.send(theEvent)
+})
+
+
+example("#send: @autobroadcast when no callback and is a match", function (check) {
+  var theEvent = { name: "event" }
+  var venue    = new Sydney({ match: function (ev) { return ev === theEvent } })
+
+  venue.add(function (event, venue) {
+    check(event, theEvent)
+  })
+
+  venue.send(theEvent)
+})
+
+
+example("#send: not @autobroadcast when no callback and is not a match", function (check) {
+  var theEvent = { name: "event" }
+  var venue    = new Sydney({ match: function (ev) { return ev !== theEvent } })
+
+  venue.add(function (event, venue) {
+    check("Should not have broadcasted")
+  })
+
+  venue.send(theEvent)
+
+  process.nextTick(function () {
+    check()
+  })
+})

@@ -13,6 +13,13 @@ example("#new: takes a callback", function () {
 })
 
 
+example("#new: takes an endpoint if has `match`", function () {
+  var endpoint = { match: function () {} }
+
+  return new Sydney(endpoint).endpoint === endpoint
+})
+
+
 example("#new: @regression does not initialize subscribers", function () {
   return new Sydney().subscribers === undefined
 })
