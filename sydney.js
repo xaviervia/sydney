@@ -92,10 +92,17 @@
       this.callback = second
     }
 
-    else
-      if (first)
-        if (first.match) this.endpoint = first
-        else this.callback = first
+    else if (first) {
+      if (first.callback && first.endpoint) {
+        this.callback = first.callback.bind(first)
+        this.endpoint = first.endpoint
+      }
+
+      if (first.callback) this.callback = first.callback.bind(first)
+      else if (first.endpoint) this.endpoint = first.endpoint
+      else if (first.match) this.endpoint = first
+      else this.callback = first
+    }
   }
 
   // ### Sydney.find( query, haystack )
@@ -104,7 +111,9 @@
   //
   // - It is exactly the same object as the `query` or
   // - Its endpoint is exactly the same object as the `query` or
-  // - Its callback is exactly the same object as the `callback` or
+  // - Its callback is exactly the same object as the `query` or
+  // - Its endpoint is exactly the same object as the `query.endpoint` or
+  // - Its callback is exactly the same object as the `query.callback`
   //
   // Returns `undefined` if not found.
   //
@@ -124,8 +133,60 @@
     for (; index < length; index ++)
       if (haystack.subscribers[index].callback === query ||
           haystack.subscribers[index].endpoint === query ||
+          haystack.subscribers[index].callback === query.callback ||
+          haystack.subscribers[index].endpoint === query.endpoint ||
           haystack.subscribers[index] === query)
         return haystack.subscribers[index]
+  }
+
+  // ### Sydney.make
+  //
+  // This method can be called with several different arguments:
+  //
+  // **`Sydney.make( Function callback )`**
+  //
+  // Wraps the `Function` to a Sydney and returns it.
+  //
+  // **`Sydney.make( Sydney subscriber )`**
+  //
+  // Returns the subscriber sent as argument.
+  //
+  // **`Sydney.make( Object endpoint, Function callback )`**
+  //
+  // Wraps the endpoint and callback in a new Sydney venue and returns it.
+  //
+  // **`Sydney.make( Object protoSubscriber )`**
+  //
+  // Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
+  // Sydney venue and returns it.
+  //
+  // If the `protoSubscriber` has a `callback`, it binds that callback to the
+  // `protoSubscriber` so that it doesn't lose context.
+  //
+  // #### Returns
+  //
+  // - `Sydney` subscriber
+  //
+  Sydney.make = function (first, second) {
+    if (second)
+      return new Sydney(first, second)
+
+    if (first instanceof Function)
+      return new Sydney(first)
+
+    if (first instanceof Sydney)
+      return first
+
+    if (first.callback && first.endpoint)
+      return new Sydney(first.endpoint, first.callback.bind(first))
+
+    if (first.callback)
+      return new Sydney(first.callback.bind(first))
+
+    if (first.endpoint)
+      return new Sydney(first.endpoint)
+
+    return first
   }
 
   // ### send( event )
@@ -202,6 +263,14 @@
   // Wraps the endpoint and callback in a new Sydney venue and adds that as
   // a subscriber.
   //
+  // **`add( Object protoSubscriber )`**
+  //
+  // Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
+  // Sydney venue and adds it as a subscriber.
+  //
+  // If the `protoSubscriber` has a `callback`, it binds that callback to the
+  // `protoSubscriber` so that it doesn't lose context.
+  //
   // #### Returns
   //
   // - `Sydney` this
@@ -209,13 +278,7 @@
   Sydney.prototype.add = function (first, second) {
     this.subscribers = this.subscribers || []
 
-    if (second) this.subscribers.push(new Sydney(first, second))
-
-    else {
-      if (first instanceof Function) first = new Sydney(first)
-
-      this.subscribers.push(first)
-    }
+    this.subscribers.push(Sydney.make(first, second))
 
     return this
   }
@@ -230,6 +293,12 @@
   //
   // If the `query` is `===` to a subscriber, removes that subscriber.
   //
+  // If the `query.callback` is `===` to the callback of a subscriber, removes
+  // that subscriber from the array.
+  //
+  // If the `query.endpoint` is `===` to the endpoint of a subscriber, removes
+  // that subscriber from the array.
+  //
   // #### Arguments
   //
   // - `Object` query
@@ -239,17 +308,17 @@
   // - `Sydney` this
   //
   Sydney.prototype.remove = function (query) {
-    this.subscribers = this.subscribers || []
+    var target, index;
 
-    this.subscribers = this.subscribers.filter(function (subscriber) {
-      if (query instanceof Function)
-        return subscriber.callback !== query
+    target = Sydney.find(query, this)
 
-      else if (query.match instanceof Function)
-        return subscriber.endpoint !== query
+    if ( ! target) return this
 
-      return subscriber !== query
-    })
+    index = this.subscribers.indexOf(Sydney.find(query, this))
+
+    if (index === -1) return this
+
+    this.subscribers.splice(index, 1)
 
     return this
   }
@@ -273,18 +342,25 @@
   // Wraps the endpoint and callback in a new Sydney venue and adds that as
   // a subscriber. Then adds `this` back into the new Sydney.
   //
+  // **`link( Object protoSubscriber )`**
+  //
+  // Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
+  // Sydney venue and adds it as a subscriber. Then adds `this` back into the
+  // new subscriber.
+  //
+  // If the `protoSubscriber` has a `callback`, it binds that callback to the
+  // `protoSubscriber` so that it doesn't lose context.
+  //
   // #### Returns
   //
   // - `Sydney` this
   //
   Sydney.prototype.link = function (first, second) {
-    if (second) first = new Sydney(first, second)
+    var subscriber = Sydney.make(first, second)
 
-    else if (first instanceof Function) first = new Sydney(first)
+    this.add(subscriber)
 
-    this.add(first)
-
-    first.add(this)
+    subscriber.add(this)
 
     return this
   }
@@ -299,6 +375,12 @@
   //
   // If the `query` is `===` to a subscriber, removes that subscriber. Also
   // removes `this` from the subscriber.
+  //
+  // If the `query.endpoint` is `===` to the endpoint of a subscriber, removes
+  // that subscriber from the array. Also removes `this` from the subscriber.
+  //
+  // If the `query.callback` is `===` to the callback of a subscriber, removes
+  // that subscriber from the array. Also removes `this` from the subscriber.
   //
   // #### Arguments
   //
