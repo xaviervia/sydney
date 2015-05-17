@@ -64,7 +64,9 @@ Finds and returns a subscriber from the haystack so that:
 
 - It is exactly the same object as the `query` or
 - Its endpoint is exactly the same object as the `query` or
-- Its callback is exactly the same object as the `callback` or
+- Its callback is exactly the same object as the `query` or
+- Its endpoint is exactly the same object as the `query.endpoint` or
+- Its callback is exactly the same object as the `query.callback`
 
 Returns `undefined` if not found.
 
@@ -76,6 +78,34 @@ Returns `undefined` if not found.
 #### Returns
 
 - `Sydney` subscriber | `undefined`
+
+### Sydney.make
+
+This method can be called with several different arguments:
+
+**`Sydney.make( Function callback )`**
+
+Wraps the `Function` to a Sydney and returns it.
+
+**`Sydney.make( Sydney subscriber )`**
+
+Returns the subscriber sent as argument.
+
+**`Sydney.make( Object endpoint, Function callback )`**
+
+Wraps the endpoint and callback in a new Sydney venue and returns it.
+
+**`Sydney.make( Object protoSubscriber )`**
+
+Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
+Sydney venue and returns it.
+
+If the `protoSubscriber` has a `callback`, it binds that callback to the
+`protoSubscriber` so that it doesn't lose context.
+
+#### Returns
+
+- `Sydney` subscriber
 
 ### send( event )
 
@@ -126,6 +156,14 @@ Adds the subscriber to the `subscribers` array.
 Wraps the endpoint and callback in a new Sydney venue and adds that as
 a subscriber.
 
+**`add( Object protoSubscriber )`**
+
+Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
+Sydney venue and adds it as a subscriber.
+
+If the `protoSubscriber` has a `callback`, it binds that callback to the
+`protoSubscriber` so that it doesn't lose context.
+
 #### Returns
 
 - `Sydney` this
@@ -139,6 +177,12 @@ If the `query` is `===` to the endpoint of a subscriber, removes that
 subscriber from the array.
 
 If the `query` is `===` to a subscriber, removes that subscriber.
+
+If the `query.callback` is `===` to the callback of a subscriber, removes
+that subscriber from the array.
+
+If the `query.endpoint` is `===` to the endpoint of a subscriber, removes
+that subscriber from the array.
 
 #### Arguments
 
@@ -167,6 +211,15 @@ adds `this` back into the provided subscriber.
 Wraps the endpoint and callback in a new Sydney venue and adds that as
 a subscriber. Then adds `this` back into the new Sydney.
 
+**`link( Object protoSubscriber )`**
+
+Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
+Sydney venue and adds it as a subscriber. Then adds `this` back into the
+new subscriber.
+
+If the `protoSubscriber` has a `callback`, it binds that callback to the
+`protoSubscriber` so that it doesn't lose context.
+
 #### Returns
 
 - `Sydney` this
@@ -181,6 +234,12 @@ subscriber from the array. Also removes `this` from the subscriber.
 
 If the `query` is `===` to a subscriber, removes that subscriber. Also
 removes `this` from the subscriber.
+
+If the `query.endpoint` is `===` to the endpoint of a subscriber, removes
+that subscriber from the array. Also removes `this` from the subscriber.
+
+If the `query.callback` is `===` to the callback of a subscriber, removes
+that subscriber from the array. Also removes `this` from the subscriber.
 
 #### Arguments
 
