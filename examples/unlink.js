@@ -49,7 +49,7 @@ example("#unlink: @function remove venue from subscriber", function () {
 
   mother.link(daughterCallback)
 
-  daughter = mother.find(daughterCallback)
+  daughter = Sydney.find(daughterCallback, mother)
 
   mother.unlink(daughterCallback)
 
@@ -78,7 +78,7 @@ example("#unlink: @endpoint remove venue from subscriber", function () {
 
   mother.link(endpoint, daughterCallback)
 
-  daughter = mother.find(daughterCallback)
+  daughter = Sydney.find(daughterCallback, mother)
 
   mother.unlink(endpoint)
 

@@ -58,6 +58,25 @@ Adds the endpoint and callback in a new Sydney venue.
 
 - `Sydney` this
 
+### Sydney.find( query, haystack )
+
+Finds and returns a subscriber from the haystack so that:
+
+- It is exactly the same object as the `query` or
+- Its endpoint is exactly the same object as the `query` or
+- Its callback is exactly the same object as the `callback` or
+
+Returns `undefined` if not found.
+
+#### Arguments
+
+- `Object` query
+- `Sydney` haystack
+
+#### Returns
+
+- `Sydney` subscriber | `undefined`
+
 ### send( event )
 
 If the venue has an `endpoint`, it calls `match` with the `event` and
@@ -89,24 +108,6 @@ Calls `send` with the provided `event` in all the subscribers.
 #### Returns
 
 - `Sydney` this
-
-### find( query )
-
-Finds and returns a subscriber so that:
-
-- It is exactly the same object as the `query`
-- Its endpoint is exactly the same object as the `query`
-- Its callback is exactly the same object as the `callback`
-
-Returns undefined if not found.
-
-#### Arguments
-
-- `Object` query
-
-#### Returns
-
-- `Sydney` subscriber | `undefined`
 
 ### add
 
@@ -188,6 +189,17 @@ removes `this` from the subscriber.
 #### Returns
 
 - `Sydney` this
+
+
+Testing
+-------
+
+```
+git clone git://github.com/xaviervia/sydney
+cd sydney
+npm install
+make test
+```
 
 License
 -------

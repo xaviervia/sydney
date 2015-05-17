@@ -98,6 +98,36 @@
         else this.callback = first
   }
 
+  // ### Sydney.find( query, haystack )
+  //
+  // Finds and returns a subscriber from the haystack so that:
+  //
+  // - It is exactly the same object as the `query` or
+  // - Its endpoint is exactly the same object as the `query` or
+  // - Its callback is exactly the same object as the `callback` or
+  //
+  // Returns `undefined` if not found.
+  //
+  // #### Arguments
+  //
+  // - `Object` query
+  // - `Sydney` haystack
+  //
+  // #### Returns
+  //
+  // - `Sydney` subscriber | `undefined`
+  //
+  Sydney.find = function (query, haystack) {
+    var index   = 0
+    var length  = (haystack.subscribers = haystack.subscribers || []).length
+
+    for (; index < length; index ++)
+      if (haystack.subscribers[index].callback === query ||
+          haystack.subscribers[index].endpoint === query ||
+          haystack.subscribers[index] === query)
+        return haystack.subscribers[index]
+  }
+
   // ### send( event )
   //
   // If the venue has an `endpoint`, it calls `match` with the `event` and
@@ -154,35 +184,6 @@
     })
 
     return this
-  }
-
-  // ### find( query )
-  //
-  // Finds and returns a subscriber so that:
-  //
-  // - It is exactly the same object as the `query`
-  // - Its endpoint is exactly the same object as the `query`
-  // - Its callback is exactly the same object as the `callback`
-  //
-  // Returns undefined if not found.
-  //
-  // #### Arguments
-  //
-  // - `Object` query
-  //
-  // #### Returns
-  //
-  // - `Sydney` subscriber | `undefined`
-  //
-  Sydney.prototype.find = function (query) {
-    var index   = 0
-    var length  = (this.subscribers = this.subscribers || []).length
-
-    for (; index < length; index ++)
-      if (this.subscribers[index].callback === query ||
-          this.subscribers[index].endpoint === query ||
-          this.subscribers[index] === query)
-        return this.subscribers[index]
   }
 
   // ### add
@@ -309,7 +310,7 @@
   // - `Sydney` this
   //
   Sydney.prototype.unlink = function (query) {
-    query = this.find(query)
+    query = Sydney.find(query, this)
 
     if (query) {
       query.remove(this)
