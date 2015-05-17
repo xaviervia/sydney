@@ -294,13 +294,11 @@
   // - `Sydney` this
   //
   Sydney.prototype.link = function (first, second) {
-    if (second) first = new Sydney(first, second)
+    var subscriber = Sydney.make(first, second)
 
-    else if (first instanceof Function) first = new Sydney(first)
+    this.add(subscriber)
 
-    this.add(first)
-
-    first.add(this)
+    subscriber.add(this)
 
     return this
   }

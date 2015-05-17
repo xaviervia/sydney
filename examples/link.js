@@ -86,4 +86,107 @@ example("#link: chainable", function () {
 })
 
 
-example("#link: @vanilla amplified with Sydney methods")
+example("#link: @vanilla @callback the Sydney is added back", function () {
+  var venue       = new Sydney
+  var subscriber  = {
+    callback: function () {
+      return this === subscriber
+    }
+  }
+
+  venue.link(subscriber)
+
+  return venue.subscribers[0].subscribers[0] === venue
+})
+
+
+example("#link: @vanilla @callback a Sydney is created", function () {
+  var venue       = new Sydney
+  var subscriber  = {
+    callback: function () {
+      return this === subscriber
+    }
+  }
+
+  venue.link(subscriber)
+
+  return venue.subscribers[0] instanceof Sydney
+})
+
+
+example("#link: @vanilla @callback is bound to original context", function () {
+  var venue       = new Sydney
+  var subscriber  = {
+    callback: function () {
+      return this === subscriber
+    }
+  }
+
+  venue.link(subscriber)
+
+  return venue.subscribers[0].callback()
+})
+
+
+example("#link: @vanilla @endpoint a Sydney is created", function () {
+  var venue       = new Sydney
+  var subscriber  = {
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  return venue.subscribers[0] instanceof Sydney
+})
+
+
+example("#link: @vanilla @endpoint is preserved", function () {
+  var venue       = new Sydney
+  var subscriber  = {
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  return venue.subscribers[0].endpoint === subscriber.endpoint
+})
+
+
+example("#link: @vanilla @endpoint & @callback, callback keeps context", function () {
+  var venue       = new Sydney
+  var subscriber  = {
+    callback: function () {
+      return this === subscriber
+    },
+
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  return venue.subscribers[0].callback()
+})
+
+
+example("#link: @vanilla @endpoint & @callback, endpoint is kept", function () {
+  var venue       = new Sydney
+  var subscriber  = {
+    callback: function () {
+      return this === subscriber
+    },
+
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  return venue.subscribers[0].endpoint === subscriber.endpoint
+})
