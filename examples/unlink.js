@@ -101,4 +101,104 @@ example("#unlink: @no-subscribers won't fail", function () {
 })
 
 
-example("#unlink: @vanilla is also unlinked")
+example("#unlink: @vanilla @callback remove from venue", function () {
+  var venue = new Sydney
+  var subscriber = {
+    callback: function () {}
+  }
+
+  venue.link(subscriber)
+
+  venue.unlink(subscriber)
+
+  return venue.subscribers.length === 0
+})
+
+
+example("#unlink: @vanilla @callback remove from subscriber", function () {
+  var shadowSubscriber;
+  var venue = new Sydney
+  var subscriber = {
+    callback: function () {}
+  }
+
+  venue.link(subscriber)
+
+  shadowSubscriber = venue.subscribers[0]
+
+  venue.unlink(subscriber)
+
+  return shadowSubscriber.subscribers.length === 0
+})
+
+
+example("#unlink: @vanilla @endpoint remove from venue", function () {
+  var venue = new Sydney
+  var subscriber = {
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  venue.unlink(subscriber)
+
+  return venue.subscribers.length === 0
+})
+
+
+example("#unlink: @vanilla @endpoint remove from subscriber", function () {
+  var shadowSubscriber;
+  var venue = new Sydney
+  var subscriber = {
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  shadowSubscriber = venue.subscribers[0]
+
+  venue.unlink(subscriber)
+
+  return shadowSubscriber.subscribers.length === 0
+})
+
+
+example("#unlink: @vanilla @endpoint & @callback remove from venue", function () {
+  var venue = new Sydney
+  var subscriber = {
+    callback: function () {},
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  venue.unlink(subscriber)
+
+  return venue.subscribers.length === 0
+})
+
+
+example("#unlink: @vanilla @endpoint & @callback remove from subscriber", function () {
+  var shadowSubscriber;
+  var venue = new Sydney
+  var subscriber = {
+    callback: function () {},
+    endpoint: {
+      match: function () {}
+    }
+  }
+
+  venue.link(subscriber)
+
+  shadowSubscriber = venue.subscribers[0]
+
+  venue.unlink(subscriber)
+
+  return shadowSubscriber.subscribers.length === 0
+})
