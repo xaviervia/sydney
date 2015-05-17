@@ -128,6 +128,28 @@
         return haystack.subscribers[index]
   }
 
+  Sydney.make = function (first, second) {
+    if (second)
+      return new Sydney(first, second)
+
+    if (first instanceof Function)
+      return new Sydney(first)
+
+    if (first instanceof Sydney)
+      return first
+
+    if (first.callback && first.endpoint)
+      return new Sydney(first.endpoint, first.callback.bind(first))
+
+    if (first.callback)
+      return new Sydney(first.callback.bind(first))
+
+    if (first.endpoint)
+      return new Sydney(first.endpoint)
+
+    return first
+  }
+
   // ### send( event )
   //
   // If the venue has an `endpoint`, it calls `match` with the `event` and
@@ -209,13 +231,7 @@
   Sydney.prototype.add = function (first, second) {
     this.subscribers = this.subscribers || []
 
-    if (second) this.subscribers.push(new Sydney(first, second))
-
-    else {
-      if (first instanceof Function) first = new Sydney(first)
-
-      this.subscribers.push(first)
-    }
+    this.subscribers.push(Sydney.make(first, second))
 
     return this
   }
