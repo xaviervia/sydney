@@ -92,10 +92,17 @@
       this.callback = second
     }
 
-    else
-      if (first)
-        if (first.match) this.endpoint = first
-        else this.callback = first
+    else if (first) {
+      if (first.callback && first.endpoint) {
+        this.callback = first.callback.bind(first)
+        this.endpoint = first.endpoint
+      }
+
+      if (first.callback) this.callback = first.callback.bind(first)
+      else if (first.endpoint) this.endpoint = first.endpoint
+      else if (first.match) this.endpoint = first
+      else this.callback = first
+    }
   }
 
   // ### Sydney.find( query, haystack )
