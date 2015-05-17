@@ -131,6 +131,8 @@
     for (; index < length; index ++)
       if (haystack.subscribers[index].callback === query ||
           haystack.subscribers[index].endpoint === query ||
+          haystack.subscribers[index].callback === query.callback ||
+          haystack.subscribers[index].endpoint === query.endpoint ||
           haystack.subscribers[index] === query)
         return haystack.subscribers[index]
   }
@@ -262,17 +264,17 @@
   // - `Sydney` this
   //
   Sydney.prototype.remove = function (query) {
-    this.subscribers = this.subscribers || []
+    var target, index;
 
-    this.subscribers = this.subscribers.filter(function (subscriber) {
-      if (query instanceof Function)
-        return subscriber.callback !== query
+    target = Sydney.find(query, this)
 
-      else if (query.match instanceof Function)
-        return subscriber.endpoint !== query
+    if ( ! target) return this
 
-      return subscriber !== query
-    })
+    index = this.subscribers.indexOf(Sydney.find(query, this))
+
+    if (index === -1) return this
+
+    this.subscribers.splice(index, 1)
 
     return this
   }
