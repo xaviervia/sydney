@@ -99,3 +99,6 @@ example("#unlink: chainable", function () {
 example("#unlink: @no-subscribers won't fail", function () {
   new Sydney().unlink(new Sydney)
 })
+
+
+example("#unlink: @vanilla is also unlinked")

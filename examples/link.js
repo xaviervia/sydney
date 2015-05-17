@@ -84,3 +84,6 @@ example("#link: chainable", function () {
 
   return mother.link(function () {}) === mother
 })
+
+
+example("#link: @vanilla amplified with Sydney methods")

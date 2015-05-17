@@ -56,3 +56,6 @@ example("#remove: chainable", function () {
 example("#remove: @no-subscribers won't fail", function () {
   new Sydney().remove(function () {})
 })
+
+
+example("#remove: @vanilla is also removed")

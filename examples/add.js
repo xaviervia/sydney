@@ -54,3 +54,11 @@ example("#add: chainable", function () {
 
   return venue.add(subscriber) === venue
 })
+
+
+example("#add: @vanilla gets amplified with Sydney methods", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  return "pending"
+})
