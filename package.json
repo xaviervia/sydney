@@ -2,6 +2,7 @@
   "name": "sydney",
   "main": "sydney.js",
   "scripts": {
+    "cov": "istanbul cover test.js",
     "doc": "locco --adapter=markdown --source=**/*.js --adapter-readme=sydney.js",
     "lint": "jshint sydney.js",
     "test": "washington examples"
@@ -23,6 +24,7 @@
   "homepage": "https://github.com/xaviervia/sydney",
   "version": "0.3.0",
   "devDependencies": {
+    "istanbul": "^0.3.14",
     "jshint": "^2.7.0",
     "locco": "1.0.2",
     "locco-markdown": "0.0.2",
