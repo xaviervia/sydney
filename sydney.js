@@ -149,7 +149,7 @@
   // - `Sydney` this
   //
   Sydney.prototype.send = function (event) {
-    var callback = undefined
+    var callback;
 
     if (this.callback)
       callback = function () { this.callback(event, this) }.bind(this)
@@ -161,7 +161,6 @@
     if (process && process.nextTick) process.nextTick(callback)
     else if (setImmediate) setImmediate(callback)
     else setTimeout(callback, 0)
-
 
     return this
   }

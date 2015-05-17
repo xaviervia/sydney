@@ -3,6 +3,7 @@
   "main": "sydney.js",
   "scripts": {
     "doc": "locco --adapter=markdown --source=**/*.js --adapter-readme=sydney.js",
+    "lint": "jshint sydney.js",
     "test": "washington examples"
   },
   "repository": {
@@ -22,6 +23,7 @@
   "homepage": "https://github.com/xaviervia/sydney",
   "version": "0.3.0",
   "devDependencies": {
+    "jshint": "^2.7.0",
     "locco": "1.0.2",
     "locco-markdown": "0.0.2",
     "washington": "0.11.2"
