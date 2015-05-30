@@ -1,3 +1,6 @@
 verbose: true
 instrumentation:
-  excludes: ["**/examples/**", "**/test.js"]
+  excludes:
+    - "**/examples/**"
+    - "**/test.js"
+    - "**/sydney.min.js"
