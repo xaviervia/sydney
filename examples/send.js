@@ -28,6 +28,7 @@ example("#send: run with immediate if there is no tick", function (check) {
   var venue = new Sydney(function () {
     value = true
   })
+  Sydney.nextTickSupported = undefined
 
   process.nextTick = undefined
 
@@ -44,6 +45,32 @@ example("#send: run with immediate if there is no tick", function (check) {
   setImmediate(function () {
     check( value || "Should be run by now")
   })
+})
+
+
+example("#send: should not fail even if there is no process", function () {
+  var called;
+  var value = false
+  var theProcess = global.process
+  var venue = new Sydney(function () {
+    value = true
+  })
+  var theSetImmediate = global.setImmediate
+  global.setImmediate = function () {
+    called = true
+  }
+  Sydney.nextTickSupported = undefined
+
+  global.process = undefined
+
+  venue.send()
+
+  global.process = theProcess
+
+  if (value) return "Should be async"
+
+  global.setImmediate = theSetImmediate
+  return called || "setImmediate wasn't called, bizarre"
 })
 
 

@@ -3,6 +3,8 @@ build:
 
 cov:
 	npm run cov
+	CODECLIMATE_REPO_TOKEN=$(shell cat .climatecoverage) \
+		codeclimate < coverage/lcov.info
 
 doc:
 	npm run doc

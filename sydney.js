@@ -105,6 +105,17 @@
     }
   }
 
+  Sydney.testIfNextTickSupported = function () {
+    try {
+      if (global.process.nextTick instanceof Function)
+        Sydney.nextTickSupported = true
+      else
+        Sydney.nextTickSupported = false
+    }
+
+    catch (e) { Sydney.nextTickSupported = false }
+  }
+
   // ### Sydney.find( query, haystack )
   //
   // Finds and returns a subscriber from the haystack so that:
@@ -219,9 +230,13 @@
 
     if (this.endpoint && ! this.endpoint.match(event)) return this
 
-    if (process && process.nextTick) process.nextTick(callback)
-    else if (setImmediate) setImmediate(callback)
-    else setTimeout(callback, 0)
+    if (Sydney.nextTickSupported === undefined) Sydney.testIfNextTickSupported()
+
+    if (Sydney.nextTickSupported) process.nextTick(callback)
+    else {
+      if (setImmediate) setImmediate(callback)
+      else setTimeout(callback, 0)
+    }
 
     return this
   }
