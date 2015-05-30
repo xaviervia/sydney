@@ -233,10 +233,7 @@
     if (Sydney.nextTickSupported === undefined) Sydney.testIfNextTickSupported()
 
     if (Sydney.nextTickSupported) process.nextTick(callback)
-    else {
-      if (setImmediate) setImmediate(callback)
-      else setTimeout(callback, 0)
-    }
+    else  setTimeout(callback, 0)
 
     return this
   }

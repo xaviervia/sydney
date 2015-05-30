@@ -22,32 +22,6 @@ example("#send: run after a tick", function (check) {
 })
 
 
-example("#send: run with immediate if there is no tick", function (check) {
-  var value = false
-  var nextTick = process.nextTick
-  var venue = new Sydney(function () {
-    value = true
-  })
-  Sydney.nextTickSupported = undefined
-
-  process.nextTick = undefined
-
-  venue.send()
-
-  process.nextTick = nextTick
-
-  if (value) check("Should be async")
-
-  process.nextTick(function () {
-    check( ! value || "Should not be run yet")
-  })
-
-  setImmediate(function () {
-    check( value || "Should be run by now")
-  })
-})
-
-
 example("#send: should not fail even if there is no process", function () {
   var called;
   var value = false
@@ -55,8 +29,8 @@ example("#send: should not fail even if there is no process", function () {
   var venue = new Sydney(function () {
     value = true
   })
-  var theSetImmediate = global.setImmediate
-  global.setImmediate = function () {
+  var theSetTimeout = global.setTimeout
+  global.setTimeout = function () {
     called = true
   }
   Sydney.nextTickSupported = undefined
@@ -69,34 +43,27 @@ example("#send: should not fail even if there is no process", function () {
 
   if (value) return "Should be async"
 
-  global.setImmediate = theSetImmediate
-  return called || "setImmediate wasn't called, bizarre"
+  global.setTimeout = theSetTimeout
+  return called || "setTimeout wasn't called, bizarre"
 })
 
 
 example("#send: run with timeout if no other choice", function (check) {
   var value           = false
   var nextTick        = process.nextTick
-  var setImmediate    = global.setImmediate
   var venue           = new Sydney(function () {
     value = true
   })
 
-  global.setImmediate = undefined
   process.nextTick    = undefined
 
   venue.send()
 
-  global.setImmediate = setImmediate
   process.nextTick    = nextTick
 
   if (value) check("Should be async")
 
   process.nextTick(function () {
-    check( ! value || "Should not be run yet")
-  })
-
-  setImmediate(function () {
     check( ! value || "Should not be run yet")
   })
 
