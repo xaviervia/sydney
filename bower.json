@@ -27,6 +27,7 @@
     ".editorconfig",
     "Makefile",
     "package.json",
-    "README.md"
+    "README.md",
+    "test.js"
   ]
 }
