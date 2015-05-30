@@ -1,4 +1,4 @@
-build:
+build: doc cov
 	npm run minify
 
 cov:
