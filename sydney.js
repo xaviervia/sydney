@@ -232,30 +232,14 @@
     return this
   }
 
-  // ### add
+  // ### add( subscriber )
   //
-  // This method can be called with several different arguments:
+  // If the `subscriber` is a `Sydney` venue, it just adds it as a
+  // subscriber in the current venue.
   //
-  // **`add( Function callback )`**
-  //
-  // Wraps the `Function` to a Sydney and adds it to the `subscribers`.
-  //
-  // **`add( Sydney subscriber )`**
-  //
-  // Adds the subscriber to the `subscribers` array.
-  //
-  // **`add( Object endpoint, Function callback )`**
-  //
-  // Wraps the endpoint and callback in a new Sydney venue and adds that as
-  // a subscriber.
-  //
-  // **`add( Object protoSubscriber )`**
-  //
-  // Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
-  // Sydney venue and adds it as a subscriber.
-  //
-  // If the `protoSubscriber` has a `callback`, it binds that callback to the
-  // `protoSubscriber` so that it doesn't lose context.
+  // If the `subscriber` is not a `Sydney` module, it adds all of `Sydney`
+  // methods to the `subscriber`. It doesn't override properties already
+  // existing on the `subscriber`.
   //
   // #### Returns
   //
