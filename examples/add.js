@@ -164,6 +164,19 @@ example("#add: don't replace @vanilla #unlink property", function () {
 })
 
 
+example("#add: don't replace @vanilla #subscribers property", function () {
+  var venue       = new Sydney
+  var subscribers = []
+  var subscriber  = {
+    subscribers: subscribers
+  }
+
+  venue.add(subscriber)
+
+  return subscriber.subscribers === subscribers
+})
+
+
 example("#add: @regression don't add the callback as subscriber", function () {
   var venue       = new Sydney
   var subscriber  = function () {}
