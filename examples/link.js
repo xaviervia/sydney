@@ -197,7 +197,7 @@ example("#link: don't replace @vanilla #subscribers property", function () {
 })
 
 
-example("#link: @regression @function doesn't add as subscriber", function () {
+example("#link: ❌ @function doesn't add as subscriber", function () {
   var mother            = new Sydney
   var daughterCallback  = function () {}
 
@@ -207,7 +207,7 @@ example("#link: @regression @function doesn't add as subscriber", function () {
 })
 
 
-example("#link: @regression @function doesn't subscribe back", function () {
+example("#link: ❌ @function doesn't subscribe back", function () {
   var mother            = new Sydney
   var daughterCallback  = function () {}
 
@@ -217,7 +217,7 @@ example("#link: @regression @function doesn't subscribe back", function () {
 })
 
 
-example("#link: @regression @endpoint doesn't add endpoint", function () {
+example("#link: ❌ @endpoint doesn't add endpoint", function () {
   var mother            = new Sydney
   var endpoint          = { match: function () {} }
   var daughterCallback  = function () {}
@@ -228,7 +228,7 @@ example("#link: @regression @endpoint doesn't add endpoint", function () {
 })
 
 
-example("#link: @regression @endpoint doesn't add callback", function () {
+example("#link: ❌ @endpoint doesn't add callback", function () {
   var mother            = new Sydney
   var endpoint          = { match: function () {} }
   var callback          = function () {}
@@ -239,7 +239,7 @@ example("#link: @regression @endpoint doesn't add callback", function () {
 })
 
 
-example("#link: @regression @endpoint doesn't subscribe back", function () {
+example("#link: ❌ @endpoint doesn't subscribe back", function () {
   var mother            = new Sydney
   var endpoint          = { match: function () {} }
   var callback          = function () {}

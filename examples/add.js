@@ -177,7 +177,7 @@ example("#add: don't replace @vanilla #subscribers property", function () {
 })
 
 
-example("#add: @regression don't add the callback as subscriber", function () {
+example("#add: ❌ don't add the callback as subscriber", function () {
   var venue       = new Sydney
   var subscriber  = function () {}
 
@@ -187,7 +187,7 @@ example("#add: @regression don't add the callback as subscriber", function () {
 })
 
 
-example("#add: @regression @endpoint first argument not used as endpoint", function () {
+example("#add: ❌ @endpoint first argument not used as endpoint", function () {
   var venue       = new Sydney
   var endpoint    = { match: function () {} }
   var subscriber  = function () {}
@@ -198,7 +198,7 @@ example("#add: @regression @endpoint first argument not used as endpoint", funct
 })
 
 
-example("#add: @regression @endpoint second argument not used as callback", function () {
+example("#add: ❌ @endpoint second argument not used as callback", function () {
   var venue       = new Sydney
   var endpoint    = { match: function () {} }
   var subscriber  = function () {}

@@ -20,7 +20,7 @@ example("#new: takes an endpoint if has `match`", function () {
 })
 
 
-example("#new: @regression does not initialize subscribers", function () {
+example("#new: ❌ does not initialize subscribers", function () {
   return new Sydney().subscribers === undefined
 })
 
