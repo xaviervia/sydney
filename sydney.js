@@ -150,54 +150,28 @@
         return haystack.subscribers[index]
   }
 
-  // ### Sydney.make
+  // ### Sydney.amplify( vanillaSubscriber )
   //
-  // This method can be called with several different arguments:
+  // Adds `Sydney.prototype` methods as mixin to the `vanillaSubscriber`.
   //
-  // **`Sydney.make( Function callback )`**
-  //
-  // Wraps the `Function` to a Sydney and returns it.
-  //
-  // **`Sydney.make( Sydney subscriber )`**
-  //
-  // Returns the subscriber sent as argument.
-  //
-  // **`Sydney.make( Object endpoint, Function callback )`**
-  //
-  // Wraps the endpoint and callback in a new Sydney venue and returns it.
-  //
-  // **`Sydney.make( Object protoSubscriber )`**
-  //
-  // Wraps the `callback` and/or `endpoint` of the `protoSubscriber` into a new
-  // Sydney venue and returns it.
-  //
-  // If the `protoSubscriber` has a `callback`, it binds that callback to the
-  // `protoSubscriber` so that it doesn't lose context.
-  //
-  // #### Returns
-  //
-  // - `Sydney` subscriber
-  //
-  Sydney.make = function (first, second) {
-    if (second)
-      return new Sydney(first, second)
+  Sydney.amplify = function (vanillaSubscriber) {
+    if (vanillaSubscriber.add === undefined)
+      vanillaSubscriber.add = Sydney.prototype.add
 
-    if (first instanceof Function)
-      return new Sydney(first)
+    if (vanillaSubscriber.broadcast === undefined)
+      vanillaSubscriber.broadcast = Sydney.prototype.broadcast
 
-    if (first instanceof Sydney)
-      return first
+    if (vanillaSubscriber.link === undefined)
+      vanillaSubscriber.link = Sydney.prototype.link
 
-    if (first.callback && first.endpoint)
-      return new Sydney(first.endpoint, first.callback.bind(first))
+    if (vanillaSubscriber.remove === undefined)
+      vanillaSubscriber.remove = Sydney.prototype.remove
 
-    if (first.callback)
-      return new Sydney(first.callback.bind(first))
+    if (vanillaSubscriber.send === undefined)
+      vanillaSubscriber.send = Sydney.prototype.send
 
-    if (first.endpoint)
-      return new Sydney(first.endpoint)
-
-    return first
+    if (vanillaSubscriber.unlink === undefined)
+      vanillaSubscriber.unlink = Sydney.prototype.unlink
   }
 
   // ### send( event )
@@ -287,10 +261,13 @@
   //
   // - `Sydney` this
   //
-  Sydney.prototype.add = function (first, second) {
+  Sydney.prototype.add = function (subscriber) {
     this.subscribers = this.subscribers || []
 
-    this.subscribers.push(Sydney.make(first, second))
+    if (!(subscriber instanceof Sydney))
+      Sydney.amplify(subscriber)
+
+    this.subscribers.push(subscriber)
 
     return this
   }
