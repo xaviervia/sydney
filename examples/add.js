@@ -16,35 +16,183 @@ example("#add: add the Sydney venue as subscriber", function () {
 })
 
 
-example("#add: add the callback as Sydney venue subscriber", function () {
+example("#add: add @vanilla module as subscriber", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  venue.add(subscriber)
+
+  return venue.subscribers[0] === subscriber
+})
+
+
+example("#add: amplify @vanilla module with #add", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  venue.add(subscriber)
+
+  return subscriber.add === Sydney.prototype.add
+})
+
+
+example("#add: amplify @vanilla module with #broadcast", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  venue.add(subscriber)
+
+  return subscriber.broadcast === Sydney.prototype.broadcast
+})
+
+
+example("#add: amplify @vanilla module with #link", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  venue.add(subscriber)
+
+  return subscriber.link === Sydney.prototype.link
+})
+
+
+example("#add: amplify @vanilla module with #remove", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  venue.add(subscriber)
+
+  return subscriber.remove === Sydney.prototype.remove
+})
+
+
+example("#add: amplify @vanilla module with #send", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  venue.add(subscriber)
+
+  return subscriber.send === Sydney.prototype.send
+})
+
+
+example("#add: amplify @vanilla module with #unlink", function () {
+  var venue       = new Sydney
+  var subscriber  = {}
+
+  venue.add(subscriber)
+
+  return subscriber.unlink === Sydney.prototype.unlink
+})
+
+
+example("#add: don't replace @vanilla #add property", function () {
+  var venue       = new Sydney
+  var property    = { name: "original" }
+  var subscriber  = {
+    add: property
+  }
+
+  venue.add(subscriber)
+
+  return subscriber.add === property
+})
+
+
+example("#add: don't replace @vanilla #broadcast property", function () {
+  var venue       = new Sydney
+  var property    = { name: "original" }
+  var subscriber  = {
+    broadcast: property
+  }
+
+  venue.add(subscriber)
+
+  return subscriber.broadcast === property
+})
+
+
+example("#add: don't replace @vanilla #link property", function () {
+  var venue       = new Sydney
+  var property    = { name: "original" }
+  var subscriber  = {
+    link: property
+  }
+
+  venue.add(subscriber)
+
+  return subscriber.link === property
+})
+
+
+example("#add: don't replace @vanilla #remove property", function () {
+  var venue       = new Sydney
+  var property    = { name: "original" }
+  var subscriber  = {
+    remove: property
+  }
+
+  venue.add(subscriber)
+
+  return subscriber.remove === property
+})
+
+
+example("#add: don't replace @vanilla #send property", function () {
+  var venue       = new Sydney
+  var property    = { name: "original" }
+  var subscriber  = {
+    send: property
+  }
+
+  venue.add(subscriber)
+
+  return subscriber.send === property
+})
+
+
+example("#add: don't replace @vanilla #unlink property", function () {
+  var venue       = new Sydney
+  var property    = { name: "original" }
+  var subscriber  = {
+    unlink: property
+  }
+
+  venue.add(subscriber)
+
+  return subscriber.unlink === property
+})
+
+
+example("#add: @regression don't add the callback as subscriber", function () {
   var venue       = new Sydney
   var subscriber  = function () {}
 
   venue.add(subscriber)
 
-  return venue.subscribers[0].callback === subscriber
+  return venue.subscribers[0].callback !== subscriber
 })
 
 
-example("#add: @endpoint first argument used as endpoint", function () {
+example("#add: @regression @endpoint first argument not used as endpoint", function () {
   var venue       = new Sydney
   var endpoint    = { match: function () {} }
   var subscriber  = function () {}
 
   venue.add(endpoint, subscriber)
 
-  return venue.subscribers[0].endpoint === endpoint
+  return venue.subscribers[0].endpoint !== endpoint
 })
 
 
-example("#add: @endpoint second argument used as callback", function () {
+example("#add: @regression @endpoint second argument not used as callback", function () {
   var venue       = new Sydney
   var endpoint    = { match: function () {} }
   var subscriber  = function () {}
 
   venue.add(endpoint, subscriber)
 
-  return venue.subscribers[0].callback === subscriber
+  return venue.subscribers[0].callback !== subscriber
 })
 
 
@@ -53,94 +201,4 @@ example("#add: chainable", function () {
   var subscriber  = function () {}
 
   return venue.add(subscriber) === venue
-})
-
-
-example("#add: @vanilla @callback a Sydney is created", function () {
-  var venue       = new Sydney
-  var subscriber  = {
-    callback: function () {
-      return this === subscriber
-    }
-  }
-
-  venue.add(subscriber)
-
-  return venue.subscribers[0] instanceof Sydney
-})
-
-
-example("#add: @vanilla @callback is bound to original context", function () {
-  var venue       = new Sydney
-  var subscriber  = {
-    callback: function () {
-      return this === subscriber
-    }
-  }
-
-  venue.add(subscriber)
-
-  return venue.subscribers[0].callback()
-})
-
-
-example("#add: @vanilla @endpoint a Sydney is created", function () {
-  var venue       = new Sydney
-  var subscriber  = {
-    endpoint: {}
-  }
-
-  venue.add(subscriber)
-
-  return venue.subscribers[0] instanceof Sydney
-})
-
-
-example("#add: @vanilla @endpoint is preserved", function () {
-  var venue       = new Sydney
-  var subscriber  = {
-    endpoint: {
-      match: function () {}
-    }
-  }
-
-  venue.add(subscriber)
-
-  return venue.subscribers[0].endpoint === subscriber.endpoint
-})
-
-
-example("#add: @vanilla @endpoint & @callback, callback keeps context", function () {
-  var venue       = new Sydney
-  var subscriber  = {
-    callback: function () {
-      return this === subscriber
-    },
-
-    endpoint: {
-      match: function () {}
-    }
-  }
-
-  venue.add(subscriber)
-
-  return venue.subscribers[0].callback()
-})
-
-
-example("#add: @vanilla @endpoint & @callback, endpoint is kept", function () {
-  var venue       = new Sydney
-  var subscriber  = {
-    callback: function () {
-      return this === subscriber
-    },
-
-    endpoint: {
-      match: function () {}
-    }
-  }
-
-  venue.add(subscriber)
-
-  return venue.subscribers[0].endpoint === subscriber.endpoint
 })
