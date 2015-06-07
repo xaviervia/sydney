@@ -3,7 +3,7 @@
 //
 // [ ![Codeship Status for xaviervia/sydney](https://codeship.com/projects/317ce050-9903-0132-893b-365d53813970/status?branch=master)](https://codeship.com/projects/63545) [![Code Climate](https://codeclimate.com/github/xaviervia/sydney/badges/gpa.svg)](https://codeclimate.com/github/xaviervia/sydney) [![Test Coverage](https://codeclimate.com/github/xaviervia/sydney/badges/coverage.svg)](https://codeclimate.com/github/xaviervia/sydney/coverage)
 //
-// Event [Subscription]()/[Venue]() library. Whole new approach:
+// Event Subscription/Venue library. Whole new approach:
 //
 // - Asynchronous emission only. Synchronous programming is over.
 // - The venue is a middleware. Propagation in the venue is mediated by
@@ -44,16 +44,8 @@
     module.exports = definition()
 
   //! Browser
-  else {
-    var theModule = definition(), global = window, old = global[name];
-
-    theModule.noConflict = function () {
-      global[name] = old;
-      return theModule;
-    }
-
-    global[name] = theModule
-  }
+  else
+    window[name] = definition()
 
 })('Sydney', function () {
   // Methods
@@ -104,40 +96,6 @@
     }
 
     catch (e) { Sydney.nextTickSupported = false }
-  }
-
-  // ### Sydney.find( query, haystack )
-  //
-  // Finds and returns a subscriber from the haystack so that:
-  //
-  // - It is exactly the same object as the `query` or
-  // - Its endpoint is exactly the same object as the `query` or
-  // - Its callback is exactly the same object as the `query` or
-  // - Its endpoint is exactly the same object as the `query.endpoint` or
-  // - Its callback is exactly the same object as the `query.callback`
-  //
-  // Returns `undefined` if not found.
-  //
-  // #### Arguments
-  //
-  // - `Object` query
-  // - `Sydney` haystack
-  //
-  // #### Returns
-  //
-  // - `Sydney` subscriber | `undefined`
-  //
-  Sydney.find = function (query, haystack) {
-    var index   = 0
-    var length  = (haystack.subscribers = haystack.subscribers || []).length
-
-    for (; index < length; index ++)
-      if (haystack.subscribers[index].callback === query ||
-          haystack.subscribers[index].endpoint === query ||
-          haystack.subscribers[index].callback === query.callback ||
-          haystack.subscribers[index].endpoint === query.endpoint ||
-          haystack.subscribers[index] === query)
-        return haystack.subscribers[index]
   }
 
   // ### Sydney.amplify( vanillaSubscriber )
