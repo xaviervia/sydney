@@ -40,8 +40,10 @@
       example("@create a simple venue", function (check) {
         var venue = new Sydney()
 
-        venue.add(function (event) {
-          check(event.value, "great")
+        venue.add({
+          callback: function (event) {
+           check(event.value, "great")
+          }
         })
 
         venue.send({
@@ -63,8 +65,10 @@
           }
         })
 
-        venue.add(function (event) {
-          check(event.broadcasted)
+        venue.add({
+          callback: function (event) {
+            check(event.broadcasted)
+          }
         })
 
         venue.send({
