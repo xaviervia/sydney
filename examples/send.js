@@ -132,8 +132,10 @@ example("#send: @autobroadcast when no endpoint or callback", function (check) {
   var venue     = new Sydney
   var theEvent  = { name: "event" }
 
-  venue.add(function (event, venue) {
-    check(event, theEvent)
+  venue.add({
+    callback: function (event, venue) {
+      check(event, theEvent)
+    }
   })
 
   venue.send(theEvent)
@@ -144,8 +146,10 @@ example("#send: @autobroadcast when no callback and is a match", function (check
   var theEvent = { name: "event" }
   var venue    = new Sydney({ match: function (ev) { return ev === theEvent } })
 
-  venue.add(function (event, venue) {
-    check(event, theEvent)
+  venue.add({
+    callback: function (event, venue) {
+      check(event, theEvent)
+    }
   })
 
   venue.send(theEvent)

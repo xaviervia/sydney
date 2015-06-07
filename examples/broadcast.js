@@ -10,7 +10,9 @@ example("#broadcast: send to the subscriber", function (check) {
   var venue = new Sydney
   var event = { name: "event" }
 
-  venue.add(function (e) { check(e, event) })
+  venue.add({
+    callback: function (e) { check(e, event) }
+  })
 
   venue.broadcast(event)
 })

@@ -30,59 +30,27 @@ example("#unlink: remove venue from subscriber", function () {
 })
 
 
-example("#unlink: @function remove from venue", function () {
-  var mother            = new Sydney
-  var daughterCallback  = function () {}
+example("#unlink: remove the @vanilla subscriber", function () {
+  var mother    = new Sydney
+  var daughter  = {}
 
-  mother.link(daughterCallback)
+  mother.link(daughter)
 
-  mother.unlink(daughterCallback)
-
-  return mother.subscribers.length === 0
-})
-
-
-example("#unlink: @function remove venue from subscriber", function () {
-  var mother            = new Sydney
-  var daughterCallback  = function () {}
-  var daughter          = undefined
-
-  mother.link(daughterCallback)
-
-  daughter = Sydney.find(daughterCallback, mother)
-
-  mother.unlink(daughterCallback)
+  mother.unlink(daughter)
 
   return daughter.subscribers.length === 0
 })
 
 
-example("#unlink: @endpoint remove from venue", function () {
-  var mother            = new Sydney
-  var endpoint          = { match: function () {} }
-  var daughterCallback  = function () {}
+example("#unlink: @vanilla remove the venue from the subscriber", function () {
+  var mother    = new Sydney
+  var daughter  = {}
 
-  mother.link(endpoint, daughterCallback)
+  mother.link(daughter)
 
-  mother.unlink(endpoint)
+  mother.unlink(daughter)
 
   return mother.subscribers.length === 0
-})
-
-
-example("#unlink: @endpoint remove venue from subscriber", function () {
-  var mother            = new Sydney
-  var endpoint          = { match: function () {} }
-  var daughterCallback  = function () {}
-  var daughter          = undefined
-
-  mother.link(endpoint, daughterCallback)
-
-  daughter = Sydney.find(daughterCallback, mother)
-
-  mother.unlink(endpoint)
-
-  return daughter.subscribers.length === 0
 })
 
 
@@ -98,107 +66,4 @@ example("#unlink: chainable", function () {
 
 example("#unlink: @no-subscribers won't fail", function () {
   new Sydney().unlink(new Sydney)
-})
-
-
-example("#unlink: @vanilla @callback remove from venue", function () {
-  var venue = new Sydney
-  var subscriber = {
-    callback: function () {}
-  }
-
-  venue.link(subscriber)
-
-  venue.unlink(subscriber)
-
-  return venue.subscribers.length === 0
-})
-
-
-example("#unlink: @vanilla @callback remove from subscriber", function () {
-  var shadowSubscriber;
-  var venue = new Sydney
-  var subscriber = {
-    callback: function () {}
-  }
-
-  venue.link(subscriber)
-
-  shadowSubscriber = venue.subscribers[0]
-
-  venue.unlink(subscriber)
-
-  return shadowSubscriber.subscribers.length === 0
-})
-
-
-example("#unlink: @vanilla @endpoint remove from venue", function () {
-  var venue = new Sydney
-  var subscriber = {
-    endpoint: {
-      match: function () {}
-    }
-  }
-
-  venue.link(subscriber)
-
-  venue.unlink(subscriber)
-
-  return venue.subscribers.length === 0
-})
-
-
-example("#unlink: @vanilla @endpoint remove from subscriber", function () {
-  var shadowSubscriber;
-  var venue = new Sydney
-  var subscriber = {
-    endpoint: {
-      match: function () {}
-    }
-  }
-
-  venue.link(subscriber)
-
-  shadowSubscriber = venue.subscribers[0]
-
-  venue.unlink(subscriber)
-
-  return shadowSubscriber.subscribers.length === 0
-})
-
-
-example("#unlink: @vanilla @endpoint & @callback remove from venue", function () {
-  var venue = new Sydney
-  var subscriber = {
-    callback: function () {},
-    endpoint: {
-      match: function () {}
-    }
-  }
-
-  venue.link(subscriber)
-
-  venue.unlink(subscriber)
-
-  return venue.subscribers.length === 0
-})
-
-
-example("#unlink: @vanilla @endpoint & @callback remove from subscriber", function () {
-  var shadowSubscriber;
-  var venue = new Sydney
-  var subscriber = {
-    callback: function () {},
-    endpoint: {
-      match: function () {}
-    }
-  }
-
-  venue.link(subscriber)
-
-  shadowSubscriber = venue.subscribers[0]
-
-  venue.unlink(subscriber)
-
-  return shadowSubscriber.subscribers.length === 0
 })
