@@ -160,26 +160,14 @@ existing on the `subscriber`.
 
 - `Sydney` this
 
-### unlink( query )
+### unlink( subscriber )
 
-If the `query` is `===` to the callback of a subscriber, removes that
-subscriber from the array. Also removes `this` from the subscriber.
-
-If the `query` is `===` to the endpoint of a subscriber, removes that
-subscriber from the array. Also removes `this` from the subscriber.
-
-If the `query` is `===` to a subscriber, removes that subscriber. Also
-removes `this` from the subscriber.
-
-If the `query.endpoint` is `===` to the endpoint of a subscriber, removes
-that subscriber from the array. Also removes `this` from the subscriber.
-
-If the `query.callback` is `===` to the callback of a subscriber, removes
-that subscriber from the array. Also removes `this` from the subscriber.
+Removes the `subscriber` from the venue and removes the venue from
+the `subscriber`.
 
 #### Arguments
 
-- `Object` query
+- `Object` subscriber
 
 #### Returns
 

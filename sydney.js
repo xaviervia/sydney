@@ -311,39 +311,23 @@
     return this
   }
 
-  // ### unlink( query )
+  // ### unlink( subscriber )
   //
-  // If the `query` is `===` to the callback of a subscriber, removes that
-  // subscriber from the array. Also removes `this` from the subscriber.
-  //
-  // If the `query` is `===` to the endpoint of a subscriber, removes that
-  // subscriber from the array. Also removes `this` from the subscriber.
-  //
-  // If the `query` is `===` to a subscriber, removes that subscriber. Also
-  // removes `this` from the subscriber.
-  //
-  // If the `query.endpoint` is `===` to the endpoint of a subscriber, removes
-  // that subscriber from the array. Also removes `this` from the subscriber.
-  //
-  // If the `query.callback` is `===` to the callback of a subscriber, removes
-  // that subscriber from the array. Also removes `this` from the subscriber.
+  // Removes the `subscriber` from the venue and removes the venue from
+  // the `subscriber`.
   //
   // #### Arguments
   //
-  // - `Object` query
+  // - `Object` subscriber
   //
   // #### Returns
   //
   // - `Sydney` this
   //
-  Sydney.prototype.unlink = function (query) {
-    query = Sydney.find(query, this)
+  Sydney.prototype.unlink = function (subscriber) {
+    subscriber.remove(this)
 
-    if (query) {
-      query.remove(this)
-
-      this.remove(query)
-    }
+    this.remove(subscriber)
 
     return this
   }
