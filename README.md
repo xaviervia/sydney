@@ -21,7 +21,7 @@ as full requests, with headers and payload:
   in an event or not. This allows venues to link to each other promiscuously
   and achieve very complex topologies in a scalable manner.
 
-> This is still alpha code.
+> Usage documentation is pending
 
 Installation
 ------------
