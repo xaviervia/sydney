@@ -59,26 +59,20 @@
   // Methods
   // -------
   //
-  // ### new
+  // ### new( [endpoint] [, callback] )
   //
-  // The constructor can be called with several different arguments:
-  //
-  // **`new Sydney( Function callback )`**
-  //
-  // Creates the venue with the `Function` as the callback.
-  //
-  // **`new Sydney( Object endpoint )`**
-  //
-  // Given that the argument has a `match` method, it is interpreted as an
-  // `endpoint`. In that case, the venue is initialized with the argument as
-  // `endpoint` and no `callback`.
-  //
-  // **`new Sydney( Object endpoint, Function callback )`**
-  //
-  // Adds the endpoint and callback in a new Sydney venue.
+  // Creates a new Sydney venue. If only a `Function` is provided, it is used
+  // as the `callback`. If only an `Object` of any other kind is provided,
+  // it is used as the `endpoint`. If two arguments are provided, the first
+  // is used as the `endpoint` and the second as the `callback`.
   //
   // > Note that `new` is completely optional. Calling `Sydney` as a function
   // > directly will have the same effect.
+  //
+  // #### Arguments
+  //
+  // - _optional_ `Object` endpoint
+  // - _optional_ `Function` callback
   //
   // #### Returns
   //
@@ -93,15 +87,11 @@
     }
 
     else if (first) {
-      if (first.callback && first.endpoint) {
-        this.callback = first.callback.bind(first)
-        this.endpoint = first.endpoint
-      }
+      if (first instanceof Function)
+        this.callback = first
 
-      if (first.callback) this.callback = first.callback.bind(first)
-      else if (first.endpoint) this.endpoint = first.endpoint
-      else if (first.match) this.endpoint = first
-      else this.callback = first
+      else
+        this.endpoint = first
     }
   }
 

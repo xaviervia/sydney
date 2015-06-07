@@ -48,7 +48,7 @@ example("#Sydney: no need for new", function () {
 })
 
 
-example("#new: @vanilla @callback is bound to original context", function () {
+example("#new: ❌ @vanilla not supported, treated as endpoint", function () {
   var subscriber  = {
     callback: function () {
       return this === subscriber
@@ -56,49 +56,5 @@ example("#new: @vanilla @callback is bound to original context", function () {
   }
   var venue = new Sydney(subscriber)
 
-  return venue.callback()
-})
-
-
-example("#new: @vanilla @endpoint is preserved", function () {
-  var subscriber  = {
-    endpoint: {
-      match: function () {}
-    }
-  }
-  var venue = new Sydney(subscriber)
-
-  return venue.endpoint === subscriber.endpoint
-})
-
-
-example("#new: @vanilla @endpoint & @callback, callback keeps context", function () {
-  var subscriber  = {
-    callback: function () {
-      return this === subscriber
-    },
-
-    endpoint: {
-      match: function () {}
-    }
-  }
-  var venue = new Sydney(subscriber)
-
-  return venue.callback()
-})
-
-
-example("#new: @vanilla @endpoint & @callback, endpoint is kept", function () {
-  var subscriber  = {
-    callback: function () {
-      return this === subscriber
-    },
-
-    endpoint: {
-      match: function () {}
-    }
-  }
-  var venue = new Sydney(subscriber)
-
-  return venue.endpoint === subscriber.endpoint
+  return venue.endpoint === subscriber
 })
