@@ -246,42 +246,24 @@
     return this
   }
 
-  // ### remove( query )
+  // ### remove( subscriber )
   //
-  // If the `query` is `===` to the callback of a subscriber, removes that
-  // subscriber from the array.
-  //
-  // If the `query` is `===` to the endpoint of a subscriber, removes that
-  // subscriber from the array.
-  //
-  // If the `query` is `===` to a subscriber, removes that subscriber.
-  //
-  // If the `query.callback` is `===` to the callback of a subscriber, removes
-  // that subscriber from the array.
-  //
-  // If the `query.endpoint` is `===` to the endpoint of a subscriber, removes
-  // that subscriber from the array.
+  // Removes the `subscriber` from the venue.
   //
   // #### Arguments
   //
-  // - `Object` query
+  // - `Object` subscriber
   //
   // #### Returns
   //
   // - `Sydney` this
   //
-  Sydney.prototype.remove = function (query) {
-    var target, index;
+  Sydney.prototype.remove = function (targetSubscriber) {
+    if ( ! this.subscribers) return this
 
-    target = Sydney.find(query, this)
-
-    if ( ! target) return this
-
-    index = this.subscribers.indexOf(Sydney.find(query, this))
-
-    if (index === -1) return this
-
-    this.subscribers.splice(index, 1)
+    this.subscribers = this.subscribers.filter(function (subscriber) {
+      return subscriber !== targetSubscriber
+    })
 
     return this
   }
