@@ -108,7 +108,7 @@ example("#link: amplify @vanilla module with #unlink", function () {
 
 example("#link: don't replace @vanilla #add property", function () {
   var venue       = new Sydney
-  var property    = { name: "original" }
+  var property    = function () {}
   var subscriber  = {
     add: property
   }
@@ -207,13 +207,13 @@ example("#link: ❌ @function doesn't add as subscriber", function () {
 })
 
 
-example("#link: ❌ @function doesn't subscribe back", function () {
+example("#link: ❌ @function subscribes back (because of @vanilla)", function () {
   var mother            = new Sydney
   var daughterCallback  = function () {}
 
   mother.link(daughterCallback)
 
-  return mother.subscribers[0].subscribers[0] !== mother
+  return mother.subscribers[0].subscribers[0] === mother
 })
 
 
@@ -239,14 +239,14 @@ example("#link: ❌ @endpoint doesn't add callback", function () {
 })
 
 
-example("#link: ❌ @endpoint doesn't subscribe back", function () {
+example("#link: ❌ @endpoint subscribes back (because of @vanilla)", function () {
   var mother            = new Sydney
   var endpoint          = { match: function () {} }
   var callback          = function () {}
 
   mother.link(endpoint, callback)
 
-  return mother.subscribers[0].subscribers[0] !== mother
+  return mother.subscribers[0].subscribers[0] === mother
 })
 
 
