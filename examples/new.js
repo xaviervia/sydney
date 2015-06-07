@@ -20,11 +20,6 @@ example("#new: takes an endpoint if has `match`", function () {
 })
 
 
-example("#new: ❌ does not initialize subscribers", function () {
-  return new Sydney().subscribers === undefined
-})
-
-
 example("#new: @endpoint endpoint is first argument", function () {
   var endpoint = { match: function () {} }
   var callback = function () {}
@@ -45,16 +40,4 @@ example("#new: @endpoint callback is second argument", function () {
 
 example("#Sydney: no need for new", function () {
   return Sydney() instanceof Sydney
-})
-
-
-example("#new: ❌ @vanilla not supported, treated as endpoint", function () {
-  var subscriber  = {
-    callback: function () {
-      return this === subscriber
-    }
-  }
-  var venue = new Sydney(subscriber)
-
-  return venue.endpoint === subscriber
 })

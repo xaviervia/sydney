@@ -197,59 +197,6 @@ example("#link: don't replace @vanilla #subscribers property", function () {
 })
 
 
-example("#link: ❌ @function doesn't add as subscriber", function () {
-  var mother            = new Sydney
-  var daughterCallback  = function () {}
-
-  mother.link(daughterCallback)
-
-  return mother.subscribers[0].callback !== daughterCallback
-})
-
-
-example("#link: ❌ @function subscribes back (because of @vanilla)", function () {
-  var mother            = new Sydney
-  var daughterCallback  = function () {}
-
-  mother.link(daughterCallback)
-
-  return mother.subscribers[0].subscribers[0] === mother
-})
-
-
-example("#link: ❌ @endpoint doesn't add endpoint", function () {
-  var mother            = new Sydney
-  var endpoint          = { match: function () {} }
-  var daughterCallback  = function () {}
-
-  mother.link(endpoint, daughterCallback)
-
-  return mother.subscribers[0].endpoint !== endpoint
-})
-
-
-example("#link: ❌ @endpoint doesn't add callback", function () {
-  var mother            = new Sydney
-  var endpoint          = { match: function () {} }
-  var callback          = function () {}
-
-  mother.link(endpoint, callback)
-
-  return mother.subscribers[0].callback !== callback
-})
-
-
-example("#link: ❌ @endpoint subscribes back (because of @vanilla)", function () {
-  var mother            = new Sydney
-  var endpoint          = { match: function () {} }
-  var callback          = function () {}
-
-  mother.link(endpoint, callback)
-
-  return mother.subscribers[0].subscribers[0] === mother
-})
-
-
 example("#link: chainable", function () {
   var mother = new Sydney
 

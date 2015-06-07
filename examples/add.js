@@ -177,38 +177,6 @@ example("#add: don't replace @vanilla #subscribers property", function () {
 })
 
 
-example("#add: ❌ don't add the callback as subscriber", function () {
-  var venue       = new Sydney
-  var subscriber  = function () {}
-
-  venue.add(subscriber)
-
-  return venue.subscribers[0].callback !== subscriber
-})
-
-
-example("#add: ❌ @endpoint first argument not used as endpoint", function () {
-  var venue       = new Sydney
-  var endpoint    = { match: function () {} }
-  var subscriber  = function () {}
-
-  venue.add(endpoint, subscriber)
-
-  return venue.subscribers[0].endpoint !== endpoint
-})
-
-
-example("#add: ❌ @endpoint second argument not used as callback", function () {
-  var venue       = new Sydney
-  var endpoint    = { match: function () {} }
-  var subscriber  = function () {}
-
-  venue.add(endpoint, subscriber)
-
-  return venue.subscribers[0].callback !== subscriber
-})
-
-
 example("#add: chainable", function () {
   var venue       = new Sydney
   var subscriber  = function () {}

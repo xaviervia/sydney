@@ -30,31 +30,6 @@ example("#remove: remove the @vanilla subscriber", function () {
 })
 
 
-example("#remove: ❌ remove the subscriber with this callback", function () {
-  var venue       = new Sydney
-  var subscriber  = function () {}
-
-  venue.add(subscriber)
-
-  venue.remove(subscriber)
-
-  return venue.subscribers.length === 0
-})
-
-
-example("#remove: ❌ @endpoint remove subscriber with this endpoint", function () {
-  var venue       = new Sydney
-  var endpoint    = { match: function () {} }
-  var subscriber  = function () {}
-
-  venue.add(endpoint, subscriber)
-
-  venue.remove(endpoint)
-
-  return venue.subscribers.length === 0
-})
-
-
 example("#remove: chainable", function () {
   var venue       = new Sydney
   var subscriber  = function () {}
